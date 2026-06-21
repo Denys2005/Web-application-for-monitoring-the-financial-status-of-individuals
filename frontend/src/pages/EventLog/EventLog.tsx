@@ -11,6 +11,8 @@ interface FinancialEvent {
   timestamp: string;
   type: EventType;
   description: string;
+  category?: string;
+  account?: string;
   valueChange: number;
   currencySymbol: string;
 }
@@ -211,6 +213,9 @@ const EventLog: React.FC = () => {
         const beforeValue = parseJsonIfNeeded(ev.beforeValue);
         const type = mapEntityType(ev.entityType, ev.actionType);
         const valueChange = computeValueChange(ev.entityType, ev.actionType, beforeValue, afterValue);
+        
+        const category = afterValue?.category || beforeValue?.category || '';
+        const account = afterValue?.account || beforeValue?.account || '';
 
         let desc = '';
         const name = (afterValue?.name || beforeValue?.name || '').toString();
@@ -248,9 +253,12 @@ const EventLog: React.FC = () => {
           type,
           description: desc,
           valueChange,
-          currencySymbol: symbol,
-        } as FinancialEvent;
-      });
+          category,
+          account,
+          currencySymbol: symbol
+        };
+      })
+      .filter(ev => ev.type !== 'UNKNOWN');
 
       setEvents(prev => isReset ? transformed : [...prev, ...transformed]);
       setHasMore(transformed.length === ITEMS_PER_PAGE);
@@ -272,26 +280,29 @@ const EventLog: React.FC = () => {
   }, [historyLoaded, typeFilter, startDate, endDate, debouncedSearch]);
 
   const highlight = (text: string) => {
-    if (!debouncedSearch) return text;
+    if (!text) return <span></span>;
+    if (!debouncedSearch) return <span>{text}</span>;
     const lc = text.toLowerCase();
     const s = debouncedSearch.toLowerCase();
-    const parts: (string | JSX.Element)[] = [];
+    const parts: React.ReactNode[] = [];
     let idx = 0;
     while (true) {
       const found = lc.indexOf(s, idx);
       if (found === -1) {
-        parts.push(text.slice(idx));
+        parts.push(<span key={`text-${idx}`}>{text.slice(idx)}</span>);
         break;
       }
-      if (found > idx) parts.push(text.slice(idx, found));
+      if (found > idx) {
+        parts.push(<span key={`text-${idx}`}>{text.slice(idx, found)}</span>);
+      }
       parts.push(
-        <span key={found} className="ev-highlight">
+        <span key={`match-${found}`} className="ev-highlight">
           {text.slice(found, found + s.length)}
         </span>
       );
       idx = found + s.length;
     }
-    return <>{parts}</>;
+    return <span>{parts}</span>;
   };
 
   const clearFilters = () => {
@@ -368,6 +379,8 @@ const EventLog: React.FC = () => {
                 <th>Timestamp</th>
                 <th>Type</th>
                 <th>Description</th>
+                <th>Category</th>
+                <th>Account</th>
                 <th className="col-change">Change</th>
               </tr>
             </thead>
@@ -392,6 +405,20 @@ const EventLog: React.FC = () => {
                       ) : null}
                     </td>
                     <td className="desc-cell">{highlight(ev.description)}</td>
+                    <td className="category-cell">
+                      {ev.category ? (
+                        <span className="badge" style={{ background: 'rgba(16, 185, 129, 0.20)', color: '#6ee7b7', border: '1px solid rgba(16, 185, 129, 0.4)' }}>
+                          {ev.category}
+                        </span>
+                      ) : null}
+                    </td>
+                    <td className="account-cell">
+                      {ev.account ? (
+                        <span className="badge" style={{ background: 'rgba(59, 130, 246, 0.20)', color: '#93c5fd', border: '1px solid rgba(59, 130, 246, 0.4)' }}>
+                          {ev.account}
+                        </span>
+                      ) : null}
+                    </td>
                     <td className={`change-cell ${ev.valueChange >= 0 ? 'pos' : 'neg'}`}>
                       {(() => {
                         const sym = ev.currencySymbol || '$';

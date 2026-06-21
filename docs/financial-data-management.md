@@ -1,7 +1,7 @@
 
-# RichFlow Financial Data Management
+# FinCash Financial Data Management
 
-**Project:** RichFlow - Personal Finance Management Application  
+**Project:** FinCash - Personal Finance Management Application  
 **Last Updated:** November 11, 2025  
 **Status:** Core Features Implemented
 
@@ -23,7 +23,7 @@
 
 ## Overview
 
-This document details the core financial data management features of the RichFlow application. These features empower users to dynamically track their financial activities by managing their income, expenses, and cash savings. This functionality is central to building the user's income statement and providing a clear, real-time view of their financial health.
+This document details the core financial data management features of the FinCash application. These features empower users to dynamically track their financial activities by managing their income, expenses, and cash savings. This functionality is central to building the user's income statement and providing a clear, real-time view of their financial health.
 
 ### Key Features
 

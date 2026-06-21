@@ -50,9 +50,9 @@ const Login: React.FC = () => {
       <div className="rf-auth-card">
         <div className="rf-auth-logo">
           <div className="rf-auth-logo-icon">
-            <img src="/assets/richflow.png" alt="RichFlow Logo" />
+            <img src="/assets/fincash.png" alt="FinCash Logo" />
           </div>
-          <span className="rf-auth-logo-text">RichFlow</span>
+          <span className="rf-auth-logo-text">FinCash</span>
         </div>
 
         <form onSubmit={handleLogin} className="rf-auth-form">

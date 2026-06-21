@@ -159,8 +159,8 @@ const Dashboard: React.FC = () => {
                       onClick={() => resetErrorBoundary()}
                       className="px-6 py-3 rounded-lg font-semibold text-white transition-all duration-200 hover:scale-105"
                       style={{
-                        background: 'linear-gradient(135deg, var(--color-purple) 0%, var(--color-purple-light) 100%)',
-                        boxShadow: '0 2px 8px rgba(115, 69, 175, 0.3)',
+                        background: 'linear-gradient(135deg, var(--color-green) 0%, var(--color-green-light) 100%)',
+                        boxShadow: '0 2px 8px rgba(16, 185, 129, 0.3)',
                       }}
                     >
                       Try again

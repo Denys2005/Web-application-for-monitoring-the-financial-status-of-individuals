@@ -298,19 +298,19 @@ export const incomeAPI = {
   },
 
   // Add new income line
-  addIncomeLine: async (name: string, amount: number, type: string, quadrant?: string) => {
+  addIncomeLine: async (name: string, amount: number, type: string, quadrant?: string, accountId?: number | null) => {
     return await apiRequest('/income', {
       method: 'POST',
-      body: JSON.stringify({ name, amount, type, quadrant }),
+      body: JSON.stringify({ name, amount, type, quadrant, accountId: accountId ?? null }),
       requiresAuth: true,
     });
   },
 
   // Update income line
-  updateIncomeLine: async (id: number, name: string, amount: number, type: string, quadrant?: string) => {
+  updateIncomeLine: async (id: number, name: string, amount: number, type: string, quadrant?: string, accountId?: number | null) => {
     return await apiRequest(`/income/${id}`, {
       method: 'PUT',
-      body: JSON.stringify({ name, amount, type, quadrant }),
+      body: JSON.stringify({ name, amount, type, quadrant, accountId: accountId ?? null }),
       requiresAuth: true,
     });
   },
@@ -335,19 +335,19 @@ export const expensesAPI = {
   },
 
   // Add new expense
-  addExpense: async (name: string, amount: number) => {
+  addExpense: async (name: string, amount: number, categoryId?: number | null, accountId?: number | null) => {
     return await apiRequest('/expenses', {
       method: 'POST',
-      body: JSON.stringify({ name, amount }),
+      body: JSON.stringify({ name, amount, categoryId: categoryId ?? null, accountId: accountId ?? null }),
       requiresAuth: true,
     });
   },
 
   // Update expense
-  updateExpense: async (id: number, name: string, amount: number) => {
+  updateExpense: async (id: number, name: string, amount: number, categoryId?: number | null, accountId?: number | null) => {
     return await apiRequest(`/expenses/${id}`, {
       method: 'PUT',
-      body: JSON.stringify({ name, amount }),
+      body: JSON.stringify({ name, amount, categoryId: categoryId ?? null, accountId: accountId ?? null }),
       requiresAuth: true,
     });
   },
@@ -355,6 +355,34 @@ export const expensesAPI = {
   // Delete expense
   deleteExpense: async (id: number) => {
     return await apiRequest(`/expenses/${id}`, {
+      method: 'DELETE',
+      requiresAuth: true,
+    });
+  },
+};
+
+// Expense Categories API calls
+export const expenseCategoriesAPI = {
+  // Get all categories
+  getExpenseCategories: async () => {
+    return await apiRequest('/expense-categories', {
+      method: 'GET',
+      requiresAuth: true,
+    });
+  },
+
+  // Add new category
+  addExpenseCategory: async (name: string) => {
+    return await apiRequest('/expense-categories', {
+      method: 'POST',
+      body: JSON.stringify({ name }),
+      requiresAuth: true,
+    });
+  },
+
+  // Delete category
+  deleteExpenseCategory: async (id: number) => {
+    return await apiRequest(`/expense-categories/${id}`, {
       method: 'DELETE',
       requiresAuth: true,
     });
@@ -487,8 +515,13 @@ export const aiAPI = {
 
 // Analysis API calls
 export const analysisAPI = {
-  getFinancialSnapshot: async (date?: string) => {
-    const url = date ? `/analysis/snapshot?date=${date}` : '/analysis/snapshot';
+  getFinancialSnapshot: async (date?: string, accountId?: number) => {
+    const params = new URLSearchParams();
+    if (date) params.append('date', date);
+    if (accountId) params.append('accountId', accountId.toString());
+    const query = params.toString();
+    const url = query ? `/analysis/snapshot?${query}` : '/analysis/snapshot';
+    
     return await apiRequest(url, {
       method: 'GET',
       requiresAuth: true,
@@ -498,9 +531,17 @@ export const analysisAPI = {
   getFinancialTrajectory: async (
     startDate: string,
     endDate: string,
-    interval: 'daily' | 'weekly' | 'monthly' = 'monthly'
+    interval: 'daily' | 'weekly' | 'monthly' = 'monthly',
+    accountId?: number
   ) => {
-    const url = `/analysis/trajectory?startDate=${startDate}&endDate=${endDate}&interval=${interval}`;
+    const params = new URLSearchParams({
+      startDate,
+      endDate,
+      interval,
+    });
+    if (accountId) params.append('accountId', accountId.toString());
+    
+    const url = `/analysis/trajectory?${params.toString()}`;
     return await apiRequest(url, {
       method: 'GET',
       requiresAuth: true,
@@ -624,3 +665,36 @@ export const currencyAPI = {
     });
   },
 };
+
+// Accounts API calls
+export const accountsAPI = {
+  getAccounts: async () => {
+    return await apiRequest('/accounts', {
+      method: 'GET',
+      requiresAuth: true,
+    });
+  },
+  
+  createAccount: async (data: { name: string; balance: number }) => {
+    return await apiRequest('/accounts', {
+      method: 'POST',
+      body: JSON.stringify(data),
+      requiresAuth: true,
+    });
+  },
+  
+  updateAccount: async (id: number, data: { name: string; balance: number }) => {
+    return await apiRequest(`/accounts/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+      requiresAuth: true,
+    });
+  },
+  
+  deleteAccount: async (id: number) => {
+    return await apiRequest(`/accounts/${id}`, {
+      method: 'DELETE',
+      requiresAuth: true,
+    });
+  },
+};

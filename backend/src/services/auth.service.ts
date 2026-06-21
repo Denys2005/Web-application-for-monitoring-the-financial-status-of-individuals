@@ -1,9 +1,9 @@
-import prisma from '../config/database.config.js';
-import { Prisma } from '@prisma/client';
+import prisma from '../config/database.config.js'; // Має бути default import
+import pkg from '@prisma/client';
+const { Prisma } = pkg;
 import { hashPassword, comparePassword } from '../utils/password.utils.js';
 import { generateRefreshToken, getRefreshTokenExpiration } from '../utils/jwt.utils.js';
 import { ActionType, EntityType } from '../types/event.types.js';
-
 interface CreateUserData {
   name: string;
   email: string;

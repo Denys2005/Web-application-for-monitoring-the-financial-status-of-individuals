@@ -16,59 +16,59 @@ export default {
     extend: {
       colors: {
         // Base colors
-        dark: '#1E1E1E',
-        gold: '#EDCA69',
-        purple: '#7345AF',
+        dark: '#0A0F0D',
+        gold: '#FBBF24',
+        green: '#10B981',
         
-        // RichFlow brand colors
-        'richflow': {
-          'purple': '#7345AF',
-          'purple-light': '#9d6dd4',
-          'purple-lighter': '#b794e0',
-          'purple-dark': '#5c3a8f',
-          'gold': '#EDCA69',
-          'gold-light': '#f5dfa0',
-          'dark': '#1a1a1a',
-          'darker': '#0f0f0f',
-          'darkest': '#0e0e10',
-          'border': '#2a2a2a',
-          'text': '#e8e8f0',
-          'text-muted': '#888888',
+        // FinCash brand colors
+        'fincash': {
+          'green': '#10B981',
+          'green-light': '#34D399',
+          'green-lighter': '#6EE7B7',
+          'green-dark': '#059669',
+          'gold': '#FBBF24',
+          'gold-light': '#FCD34D',
+          'dark': '#0A0F0D',
+          'darker': '#050706',
+          'darkest': '#020302',
+          'border': '#1A2E2A',
+          'text': '#E8F0ED',
+          'text-muted': '#94A3B8',
         },
         
         // Semantic colors
-        'positive': '#2ecc71',
-        'positive-light': '#7be5c9',
-        'negative': '#ff6b6b',
-        'negative-light': '#ff9a9a',
-        'expense': '#e0626f',
-        'expense-light': '#f3a6b0',
-        'asset': '#5aa8ff',
-        'liability': '#ff7b7b',
+        'positive': '#10B981',
+        'positive-light': '#D1FAE5',
+        'negative': '#EF4444',
+        'negative-light': '#FEE2E2',
+        'expense': '#F87171',
+        'expense-light': '#FEF2F2',
+        'asset': '#60A5FA',
+        'liability': '#F87171',
       },
       
       // Custom gradients via backgroundImage
       backgroundImage: {
         // Primary gradient for headers and buttons
-        'richflow-gradient': 'linear-gradient(135deg, #7345AF 0%, #9d6dd4 100%)',
-        'richflow-gradient-hover': 'linear-gradient(135deg, #5c3a8f 0%, #7345AF 100%)',
+        'fincash-gradient': 'linear-gradient(135deg, #10B981 0%, #34D399 100%)',
+        'fincash-gradient-hover': 'linear-gradient(135deg, #059669 0%, #10B981 100%)',
         
         // Card header gradients (lighter variant)
-        'richflow-card-header': 'linear-gradient(135deg, #9d6dd4 0%, #b794e0 100%)',
+        'fincash-card-header': 'linear-gradient(135deg, #34D399 0%, #6EE7B7 100%)',
         
         // Progress bar gradients
-        'progress-positive': 'linear-gradient(90deg, #2ecc71 0%, #7be5c9 100%)',
-        'progress-negative': 'linear-gradient(90deg, #ff6b6b 0%, #ff9a9a 100%)',
+        'progress-positive': 'linear-gradient(90deg, #10B981 0%, #34D399 100%)',
+        'progress-negative': 'linear-gradient(90deg, #EF4444 0%, #F87171 100%)',
         
         // Bar chart gradients
-        'bar-income': 'linear-gradient(90deg, #7345AF 0%, #c69df7 100%)',
-        'bar-expenses': 'linear-gradient(90deg, #e0626f 0%, #f3a6b0 100%)',
-        'bar-cashflow': 'linear-gradient(90deg, #2ecc71 0%, #7be5c9 100%)',
-        'bar-assets': 'linear-gradient(90deg, #EDCA69 0%, #f5dfa0 100%)',
-        'bar-liabilities': 'linear-gradient(90deg, #ff7b7b 0%, #ffb0b0 100%)',
+        'bar-income': 'linear-gradient(90deg, #10B981 0%, #6EE7B7 100%)',
+        'bar-expenses': 'linear-gradient(90deg, #F87171 0%, #FCA5A5 100%)',
+        'bar-cashflow': 'linear-gradient(90deg, #10B981 0%, #34D399 100%)',
+        'bar-assets': 'linear-gradient(90deg, #FBBF24 0%, #FCD34D 100%)',
+        'bar-liabilities': 'linear-gradient(90deg, #F87171 0%, #FCA5A5 100%)',
         
         // Scrollbar gradient
-        'scrollbar': 'linear-gradient(135deg, #7345AF 0%, #EDCA69 100%)',
+        'scrollbar': 'linear-gradient(135deg, #10B981 0%, #FBBF24 100%)',
       },
       
       fontSize: {
@@ -102,13 +102,13 @@ export default {
       
       boxShadow: {
         'card': '0 4px 15px rgba(0, 0, 0, 0.3)',
-        'card-hover': '0 6px 20px rgba(115, 69, 175, 0.2)',
-        'header': '0 4px 12px rgba(115, 69, 175, 0.3)',
-        'button': '0 4px 12px rgba(157, 109, 212, 0.4)',
-        'button-hover': '0 4px 12px rgba(115, 69, 175, 0.3)',
-        'input-focus': '0 0 0 2px rgba(157, 109, 212, 0.2)',
+        'card-hover': '0 6px 20px rgba(16, 185, 129, 0.2)',
+        'header': '0 4px 12px rgba(16, 185, 129, 0.3)',
+        'button': '0 4px 12px rgba(52, 211, 153, 0.4)',
+        'button-hover': '0 4px 12px rgba(16, 185, 129, 0.3)',
+        'input-focus': '0 0 0 2px rgba(52, 211, 153, 0.2)',
         'bar': '0 6px 18px rgba(0, 0, 0, 0.4)',
-        'progress': '0 4px 10px rgba(121, 72, 204, 0.18)',
+        'progress': '0 4px 10px rgba(16, 185, 129, 0.18)',
         'graph-card': '0 8px 24px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.02)',
       },
       

@@ -1,6 +1,6 @@
-# RichFlow Backend Architecture Optimization
+# FinCash Backend Architecture Optimization
 
-**Project:** RichFlow - Personal Finance Management Application  
+**Project:** FinCash - Personal Finance Management Application  
 **Last Updated:** December 26, 2025  
 **Status:** Event-Sourced Financial Engine - Production Ready
 
@@ -13,7 +13,7 @@
 3. [Event Sourcing Implementation](#event-sourcing-implementation)
 4. [State Reconstruction & Reducers](#state-reconstruction--reducers)
 5. [Snapshotting & Performance Optimization](#snapshotting--performance-optimization)
-6. [Domain Alignment (RichFlow Philosophy)](#domain-alignment-richflow-philosophy)
+6. [Domain Alignment (FinCash Philosophy)](#domain-alignment-richflow-philosophy)
 7. [Data Integrity & Safety](#data-integrity--safety)
 8. [Code Quality & Modularity](#code-quality--modularity)
 9. [Future-Proofing & Scalability](#future-proofing--scalability)
@@ -25,7 +25,7 @@
 
 ## Overview
 
-The RichFlow backend has successfully transitioned from a standard CRUD application to a robust **Event-Sourced Financial Engine**. This architectural evolution aligns perfectly with the RichFlow Project Charter and standard Event Sourcing patterns.
+The FinCash backend has successfully transitioned from a standard CRUD application to a robust **Event-Sourced Financial Engine**. This architectural evolution aligns perfectly with the FinCash Project Charter and standard Event Sourcing patterns.
 
 ### Core Problem Solved
 
@@ -43,7 +43,7 @@ The implementation solves the critical challenge of **"financial time travel"** 
 | Category | Score | Assessment |
 |----------|-------|------------|
 | **Architectural Integrity** | Strong | Strict adherence to Event Sourcing principles |
-| **Domain Alignment** | Excellent | Perfect fit for RichFlow/Kiyosaki philosophy |
+| **Domain Alignment** | Excellent | Perfect fit for FinCash/Kiyosaki philosophy |
 | **Data Integrity** | Robust | Transactional writes with full consistency |
 | **Code Quality** | High | Clean separation of concerns, type-safe |
 | **Scalability** | Future-Proof | CQRS-lite pattern with snapshotting |
@@ -207,11 +207,11 @@ model FinancialSnapshot {
 
 ---
 
-## Domain Alignment (RichFlow Philosophy)
+## Domain Alignment (FinCash Philosophy)
 
 ### Kiyosaki's Metrics Integration
 
-The system naturally calculates RichFlow-specific metrics that align with Robert Kiyosaki's financial philosophy:
+The system naturally calculates FinCash-specific metrics that align with Robert Kiyosaki's financial philosophy:
 
 | Metric | Calculation | Purpose |
 |--------|-------------|---------|
@@ -429,7 +429,7 @@ function assetReducer(state, event) {
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                           RichFlow Architecture                              │
+│                           FinCash Architecture                              │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
 │  ┌─────────────────────────────────────────────────────────────────────┐   │
@@ -552,7 +552,7 @@ function assetReducer(state, event) {
 
 ## Conclusion
 
-The RichFlow backend represents a **high-quality, professional-grade architecture** that transforms a simple finance tracker into a serious financial engine capable of:
+The FinCash backend represents a **high-quality, professional-grade architecture** that transforms a simple finance tracker into a serious financial engine capable of:
 
 ### Capabilities Achieved
 
@@ -573,7 +573,7 @@ The RichFlow backend represents a **high-quality, professional-grade architectur
 - ✅ **Type Safety**: Full TypeScript coverage
 - ✅ **Domain Alignment**: Native Kiyosaki philosophy support
 
-This architecture positions RichFlow as a robust foundation for continued feature development while maintaining data integrity and performance as the user base and data volume grow.
+This architecture positions FinCash as a robust foundation for continued feature development while maintaining data integrity and performance as the user base and data volume grow.
 
 ---
 

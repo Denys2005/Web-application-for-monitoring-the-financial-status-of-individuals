@@ -70,123 +70,139 @@ const Sidebar: React.FC<Props> = ({ onOpenAssistant, onOpenActivity, mobileOpen 
   return (
     <>
       {/* Mobile Overlay */}
-      <div 
+      <div
         className={`rf-sidebar-overlay ${mobileOpen ? 'active' : ''}`}
         onClick={closeSidebar}
       ></div>
 
-      <aside 
+      <aside
         className={`rf-sidebar ${mobileOpen ? 'open' : ''}`}
       >
-      
-      {/* User Info Section */}
-      <div className="rf-sidebar-user">
-        <div className="rf-sidebar-avatar">
-          <img src="/assets/richflow.png" alt="RichFlow Logo" />
+
+        {/* User Info Section */}
+        <div className="rf-sidebar-user">
+          <div className="rf-sidebar-avatar">
+            <img src="/assets/fincash.png" alt="FinCash Logo" />
+          </div>
+          <div className="rf-sidebar-user-details">
+            <span className="rf-sidebar-user-name">{user?.name}</span>
+            <span className="rf-sidebar-user-email">{user?.email}</span>
+          </div>
         </div>
-        <div className="rf-sidebar-user-details">
-          <span className="rf-sidebar-user-name">{user?.name}</span>
-          <span className="rf-sidebar-user-email">{user?.email}</span>
+
+        {/* Home Button */}
+        <div className="rf-sidebar-section">
+          <button
+            className="rf-sidebar-btn"
+            onClick={() => { navigate("/"); closeSidebar(); }}
+          >
+            <span className="rf-sidebar-text home"> Home </span>
+          </button>
         </div>
-      </div>
 
-      {/* Home Button */}
-      <div className="rf-sidebar-section">
-        <button 
-          className="rf-sidebar-btn" 
-          onClick={() => { navigate("/"); closeSidebar(); }}
-        > 
-          <span className="rf-sidebar-text home"> Home </span>
-        </button>
-      </div>
-
-      {/* General Section */}
-      <div className="rf-sidebar-section">
-        <button className="rf-sidebar-label">
-          <span> General </span>
-        </button>
-
-        <button 
-          className="rf-sidebar-btn" 
-          onClick={() => { navigate("/user-guide"); closeSidebar(); }}
-        > 
-          <span className="rf-sidebar-text"> User Guide </span>
-        </button>
-
-        <button 
-          className="rf-sidebar-btn" 
-          onClick={() => setShowCurrencyModal(true)}
-        > 
-          <span className="rf-sidebar-text"> Change Currency </span>
-        </button>
-
-        {!isAnalysisPage && (
-          <button 
-            className="rf-sidebar-btn"
-            onClick={handleAssistantClick}
-          > 
-            <span className="rf-sidebar-text"> Saki Assistant </span>
+        {/* General Section */}
+        <div className="rf-sidebar-section">
+          <button className="rf-sidebar-label">
+            <span> General </span>
           </button>
-        )}
 
-        {!isAnalysisPage && (
-          <button 
+          <button
             className="rf-sidebar-btn"
-            onClick={handleActivityClick}
-          > 
-            <span className="rf-sidebar-text"> Recent Activity </span>
+            onClick={() => { navigate("/user-guide"); closeSidebar(); }}
+          >
+            <span className="rf-sidebar-text"> User Guide </span>
           </button>
-        )}
 
-        <button 
-          className="rf-sidebar-btn" 
-          onClick={() => { navigate('/event-log'); closeSidebar(); }}
-        >
-          <span className="rf-sidebar-text"> View Event Log </span>
-        </button> 
-        
-        <button 
-          className="rf-sidebar-btn" 
-          onClick={() => { navigate(dynamicPageRoute); closeSidebar(); }}
-        > 
-          <span className="rf-sidebar-text"> {dynamicPageLabel} </span>
-        </button>
-      </div>
+          <button
+            className="rf-sidebar-btn"
+            onClick={() => setShowCurrencyModal(true)}
+          >
+            <span className="rf-sidebar-text"> Change Currency </span>
+          </button>
 
-      {/* Settings Section */}
-      <div className="rf-sidebar-section">
-        <button className="rf-sidebar-label">
-          <span> Settings </span>
-        </button>
+          {/* {!isAnalysisPage && (
+            <button
+              className="rf-sidebar-btn"
+              onClick={handleAssistantClick}
+            >
+              <span className="rf-sidebar-text"> Saki Assistant </span>
+            </button>
+          )} */}
 
-        <button 
-          className="rf-sidebar-btn" 
-          onClick={() => openSettingsModal('username')}
-        > 
-          <span className="rf-sidebar-text"> Change Username </span>
-        </button>
+          {!isAnalysisPage && (
+            <button
+              className="rf-sidebar-btn"
+              onClick={handleActivityClick}
+            >
+              <span className="rf-sidebar-text"> Recent Activity </span>
+            </button>
+          )}
 
-        <button 
-          className="rf-sidebar-btn" 
-          onClick={() => openSettingsModal('email')}
-        > 
-          <span className="rf-sidebar-text"> Change Email </span>
-        </button>
+          {user?.isAdmin && (
+            <button
+              className="rf-sidebar-btn"
+              onClick={() => { navigate('/admin'); closeSidebar(); }}
+            >
+              <span className="rf-sidebar-text"> Admin Panel </span>
+            </button>
+          )}
 
-        <button 
-          className="rf-sidebar-btn" 
-          onClick={() => openSettingsModal('password')}
-        > 
-          <span className="rf-sidebar-text"> Change Password </span>
-        </button>
+          <button
+            className="rf-sidebar-btn"
+            onClick={() => { navigate('/event-log'); closeSidebar(); }}
+          >
+            <span className="rf-sidebar-text"> View Event Log </span>
+          </button>
 
-        <button 
-          className="rf-sidebar-btn" 
-          onClick={() => { handleLogout(); closeSidebar(); }}
-        > 
-          <span className="rf-sidebar-text"> Log Out </span>
-        </button>
-      </div>
+          <button
+            className="rf-sidebar-btn"
+            onClick={() => { navigate('/accounts'); closeSidebar(); }}
+          >
+            <span className="rf-sidebar-text"> Accounts </span>
+          </button>
+
+          <button
+            className="rf-sidebar-btn"
+            onClick={() => { navigate(dynamicPageRoute); closeSidebar(); }}
+          >
+            <span className="rf-sidebar-text"> {dynamicPageLabel} </span>
+          </button>
+        </div>
+
+        {/* Settings Section */}
+        <div className="rf-sidebar-section">
+          <button className="rf-sidebar-label">
+            <span> Settings </span>
+          </button>
+
+          <button
+            className="rf-sidebar-btn"
+            onClick={() => openSettingsModal('username')}
+          >
+            <span className="rf-sidebar-text"> Change Username </span>
+          </button>
+
+          <button
+            className="rf-sidebar-btn"
+            onClick={() => openSettingsModal('email')}
+          >
+            <span className="rf-sidebar-text"> Change Email </span>
+          </button>
+
+          <button
+            className="rf-sidebar-btn"
+            onClick={() => openSettingsModal('password')}
+          >
+            <span className="rf-sidebar-text"> Change Password </span>
+          </button>
+
+          <button
+            className="rf-sidebar-btn"
+            onClick={() => { handleLogout(); closeSidebar(); }}
+          >
+            <span className="rf-sidebar-text"> Log Out </span>
+          </button>
+        </div>
 
       </aside>
 

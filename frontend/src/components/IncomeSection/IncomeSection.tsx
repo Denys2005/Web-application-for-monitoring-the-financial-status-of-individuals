@@ -8,6 +8,7 @@ import {
   IncomeQuadrant,
   IncomeType
 } from "../../hooks/queries/useIncome";
+import { useAccounts } from "../../hooks/queries/useAccounts";
 import { useCurrency } from "../../context/CurrencyContext";
 import { formatCurrency } from "../../utils/currency.utils";
 import FinancialTable, { ColumnDefinition } from "../Shared/FinancialTable";
@@ -23,6 +24,7 @@ const IncomeSection: React.FC = () => {
   
   // TanStack Query hooks
   const { data: income, isLoading, error: queryError } = useIncomeQuery();
+  const { data: accounts = [] } = useAccounts();
   const addIncomeMutation = useAddIncomeMutation();
   const updateIncomeMutation = useUpdateIncomeMutation();
   const deleteIncomeMutation = useDeleteIncomeMutation();
@@ -35,7 +37,8 @@ const IncomeSection: React.FC = () => {
     section: "earned" | "portfolio" | "passive",
     name: string,
     amount: string,
-    quadrantOverride?: IncomeQuadrant
+    quadrantOverride?: IncomeQuadrant,
+    accountId?: number | null
   ) => {
     if (!name.trim() || !amount.trim() || addIncomeMutation.isPending) return;
     
@@ -51,7 +54,8 @@ const IncomeSection: React.FC = () => {
         name,
         amount: parseFloat(amount),
         type,
-        quadrant: resolvedQuadrant
+        quadrant: resolvedQuadrant,
+        accountId
       });
     } catch (err: unknown) {
       setLocalError('Failed to add income');
@@ -64,7 +68,8 @@ const IncomeSection: React.FC = () => {
     name: string,
     amount: number,
     type: IncomeType,
-    quadrantOverride?: IncomeQuadrant
+    quadrantOverride?: IncomeQuadrant,
+    accountId?: number | null
   ) => {
     if (updateIncomeMutation.isPending) return;
     
@@ -75,7 +80,8 @@ const IncomeSection: React.FC = () => {
         name,
         amount,
         type,
-        quadrant: quadrantOverride
+        quadrant: quadrantOverride,
+        accountId
       });
       setEditingItem(null);
     } catch (err: unknown) {
@@ -108,6 +114,7 @@ const IncomeSection: React.FC = () => {
   }) => {
     const [source, setSource] = useState("");
     const [amount, setAmount] = useState("");
+    const [selectedAccountId, setSelectedAccountId] = useState<number | null>(null);
     const [quadrantSelection, setQuadrantSelection] = useState<IncomeQuadrant>('EMPLOYEE');
     const isEarnedSection = section === 'earned';
     const sectionType = (section.charAt(0).toUpperCase() + section.slice(1)) as IncomeType;
@@ -116,6 +123,7 @@ const IncomeSection: React.FC = () => {
       setEditingItem(item);
       setSource(item.name);
       setAmount(item.amount.toString());
+      setSelectedAccountId(item.accountId ?? null);
       if (isEarnedSection) {
         setQuadrantSelection(item.quadrant || 'EMPLOYEE');
       }
@@ -124,9 +132,10 @@ const IncomeSection: React.FC = () => {
     const handleSaveEdit = () => {
       if (editingItem && source.trim() && amount.trim()) {
         const quadrantForEdit = isEarnedSection ? quadrantSelection : editingItem.quadrant;
-        handleUpdateIncome(editingItem.id, source, parseFloat(amount), editingItem.type, quadrantForEdit);
+        handleUpdateIncome(editingItem.id, source, parseFloat(amount), editingItem.type, quadrantForEdit, selectedAccountId);
         setSource("");
         setAmount("");
+        setSelectedAccountId(null);
       }
     };
 
@@ -134,12 +143,14 @@ const IncomeSection: React.FC = () => {
       setEditingItem(null);
       setSource("");
       setAmount("");
+      setSelectedAccountId(null);
     };
 
     const handleAddClick = () => {
-      handleAddIncome(section, source, amount, isEarnedSection ? quadrantSelection : undefined);
+      handleAddIncome(section, source, amount, isEarnedSection ? quadrantSelection : undefined, selectedAccountId);
       setSource("");
       setAmount("");
+      setSelectedAccountId(null);
     };
 
     const handleDeleteItem = (item: IncomeItem) => {
@@ -152,7 +163,30 @@ const IncomeSection: React.FC = () => {
 
     // Column definitions for FinancialTable
     const columns: ColumnDefinition<IncomeItem>[] = [
-      { header: 'Source', accessor: 'name' },
+      { 
+        header: 'Source', 
+        accessor: (item) => (
+          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            {item.name}
+            {item.accountName && (
+              <span
+                style={{
+                  fontSize: '10px',
+                  fontWeight: 600,
+                  padding: '2px 7px',
+                  borderRadius: '999px',
+                  background: 'rgba(59, 130, 246, 0.15)',
+                  color: '#93c5fd',
+                  border: '1px solid rgba(59, 130, 246, 0.3)',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {item.accountName}
+              </span>
+            )}
+          </span>
+        ) 
+      },
       { 
         header: 'Amount', 
         accessor: (item) => formatCurrency(item.amount, currency),
@@ -207,6 +241,19 @@ const IncomeSection: React.FC = () => {
               <option value="SELF_EMPLOYED">Self-Employed</option>
             </select>
           )}
+          <select
+            className="rf-input"
+            style={{ appearance: 'auto', backgroundColor: '#1e293b' }}
+            value={selectedAccountId || ''}
+            onChange={(e) => setSelectedAccountId(e.target.value ? Number(e.target.value) : null)}
+          >
+            <option value="">Без рахунку</option>
+            {accounts.map((acc) => (
+              <option key={acc.id} value={acc.id}>
+                {acc.name}
+              </option>
+            ))}
+          </select>
         </div>
 
         {isEarnedSection && (

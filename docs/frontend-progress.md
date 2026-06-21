@@ -1,6 +1,6 @@
-# RichFlow Frontend Development Progress
+# FinCash Frontend Development Progress
 
-**Project:** RichFlow - Personal Finance Management Application  
+**Project:** FinCash - Personal Finance Management Application  
 **Last Updated:** October 29, 2025  
 **Status:** Initial Development Phase Complete
 
@@ -22,7 +22,7 @@
 
 ## Overview
 
-RichFlow is a personal finance management application designed to help users track their income, expenses, and overall financial health. The tagline "See Where Your Money Flows — and Make It Work for You" encapsulates the core mission: providing financial transparency and actionable insights.
+FinCash is a personal finance management application designed to help users track their income, expenses, and overall financial health. The tagline "See Where Your Money Flows — and Make It Work for You" encapsulates the core mission: providing financial transparency and actionable insights.
 
 The frontend is built with React and TypeScript, featuring a modern, gradient-based design with a purple and gold color scheme.
 
@@ -186,7 +186,7 @@ frontend/
 - Username input field
 - Password input field
 - Login button
-- RichFlow branding
+- FinCash branding
 
 **Styling:** Dark translucent card (#171717) on gradient background
 
@@ -203,7 +203,7 @@ frontend/
 - Confirm password input field
 - Email address input field
 - Signup button
-- RichFlow branding
+- FinCash branding
 
 **Styling:** Matches login page aesthetic
 

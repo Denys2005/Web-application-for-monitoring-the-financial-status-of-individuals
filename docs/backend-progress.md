@@ -1,6 +1,6 @@
-# RichFlow Backend Development Progress
+# FinCash Backend Development Progress
 
-**Project:** RichFlow - Personal Finance Management Application  
+**Project:** FinCash - Personal Finance Management Application  
 **Last Updated:** October 29, 2025  
 **Status:** Initial Development Phase Complete
 
@@ -22,7 +22,7 @@
 
 ## Overview
 
-The RichFlow backend provides the API and database infrastructure for the personal finance management application. Built with Node.js and Express, it handles user authentication, financial data management, and business logic for tracking income, expenses, assets, and liabilities.
+The FinCash backend provides the API and database infrastructure for the personal finance management application. Built with Node.js and Express, it handles user authentication, financial data management, and business logic for tracking income, expenses, assets, and liabilities.
 
 The backend follows a RESTful API architecture and uses PostgreSQL as the database, managed through Prisma ORM for type-safe database access and migrations.
 
@@ -470,7 +470,7 @@ The following endpoints need to be implemented:
 Required environment variables (to be configured in `.env` file):
 
 ```bash
-DATABASE_URL="postgresql://user:password@localhost:5432/richflow"
+DATABASE_URL="postgresql://user:password@localhost:5432/fincash"
 PORT=5000
 ```
 
@@ -495,12 +495,12 @@ npm install
 
 1. Create a PostgreSQL database:
 ```sql
-CREATE DATABASE richflow;
+CREATE DATABASE fincash;
 ```
 
 2. Configure `.env` file:
 ```bash
-DATABASE_URL="postgresql://username:password@localhost:5432/richflow"
+DATABASE_URL="postgresql://username:password@localhost:5432/fincash"
 PORT=5000
 ```
 

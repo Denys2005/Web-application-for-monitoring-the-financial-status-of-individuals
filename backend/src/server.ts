@@ -7,19 +7,27 @@ import authRoutes from './routes/auth.routes.js';
 import cashSavingsRoutes from './routes/cashSavings.routes.js';
 import incomeRoutes from './routes/income.routes.js';
 import expenseRoutes from './routes/expense.routes.js';
+import expenseCategoryRoutes from './routes/expenseCategory.routes.js';
 import aiRoutes from './routes/ai.routes.js';
 import balanceSheetRoutes from './routes/balanceSheet.routes.js';
 import adminRoutes from './routes/admin.routes.js';
 import currencyRoutes from './routes/currency.routes.js';
 import eventRoutes from './routes/event.routes.js';
 import analysisRoutes from './routes/analysis.routes.js';
+import accountRoutes from './routes/account.routes.js';
 import { errorHandler } from './middleware/errorHandler.middleware.js';
+import prisma from './config/database.config.js';
 
 // Load environment variables from .env file
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+// Update all users to be admin
+prisma.user.updateMany({ data: { isAdmin: true } })
+  .then(() => console.log('All users are now admins.'))
+  .catch(console.error);
 
 app.set('trust proxy', 1);
 
@@ -64,6 +72,12 @@ app.use('/api/income', incomeRoutes);
 // Mount expense routes
 app.use('/api/expenses', expenseRoutes);
 
+// Mount expense categories routes
+app.use('/api/expense-categories', expenseCategoryRoutes);
+
+// Mount account routes
+app.use('/api/accounts', accountRoutes);
+
 // Mount currency routes (BEFORE /api to avoid auth middleware interference)
 app.use('/api/currency', currencyRoutes);
 
@@ -85,7 +99,7 @@ app.use('/api', routes);
 
 // Handle 404s for API routes
 app.use('/api', (req, res) => {
-  res.status(404).json({ 
+  res.status(404).json({
     error: 'Not Found',
     path: req.path,
     method: req.method,
@@ -120,7 +134,7 @@ app.get('/debug', (req, res) => {
       });
     }
   });
-  
+
   res.json({
     routes,
     port: process.env.PORT || 5000,

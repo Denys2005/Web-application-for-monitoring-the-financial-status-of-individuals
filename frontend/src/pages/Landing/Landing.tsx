@@ -8,23 +8,23 @@ const Landing: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   
   return (
-    <div className="text-white" style={{ background: 'linear-gradient(to bottom right, #7345AF, #7345AF, #1E1E1E, #000000)', minHeight: '100vh' }}>
+    <div className="text-white" style={{ background: 'linear-gradient(to bottom right, #10B981, #10B981, #0A0F0D, #000000)', minHeight: '100vh' }}>
       {/* Header */}
       <header className="bg-(--color-dark) px-4 sm:px-8 py-4 sm:py-6 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="w-10 h-10 sm:w-12 sm:h-12 bg-(--color-dark) rounded-full flex items-center justify-center">
-              <img src="/assets/richflow.png" alt="RichFlow Logo" className="w-full h-full object-contain" />
+              <img src="/assets/fincash.png" alt="FinCash Logo" className="w-full h-full object-contain" />
             </div>
-            <span className="text-2xl sm:text-4xl md:text-5xl font-bold text-(--color-gold)">RichFlow</span>
+            <span className="text-2xl sm:text-4xl md:text-5xl font-bold text-(--color-gold)">FinCash</span>
           </div>
           
           {/* Desktop Navigation */}
           <nav className="hidden md:flex gap-4">
-            <button onClick={() => navigate('/login')} className="btn-shimmer bg-(--color-purple) text-(--color-gold) px-6 sm:px-8 py-2 sm:py-3 rounded-2xl font-bold text-base sm:text-xl transition hover:-translate-y-0.5 hover:shadow-lg">
+            <button onClick={() => navigate('/login')} className="btn-shimmer bg-(--color-green) text-(--color-gold) px-6 sm:px-8 py-2 sm:py-3 rounded-2xl font-bold text-base sm:text-xl transition hover:-translate-y-0.5 hover:shadow-lg">
               { isAuthenticated ? 'Dashboard' : 'Log in'}
             </button>
-            <button onClick={() => navigate('/signup')} className="btn-shimmer bg-(--color-purple) text-(--color-gold) px-6 sm:px-8 py-2 sm:py-3 rounded-2xl font-bold text-base sm:text-xl transition hover:-translate-y-0.5 hover:shadow-lg">
+            <button onClick={() => navigate('/signup')} className="btn-shimmer bg-(--color-green) text-(--color-gold) px-6 sm:px-8 py-2 sm:py-3 rounded-2xl font-bold text-base sm:text-xl transition hover:-translate-y-0.5 hover:shadow-lg">
               Sign up
             </button>
           </nav>
@@ -48,13 +48,13 @@ const Landing: React.FC = () => {
             <nav className="absolute top-full left-4 right-4 bg-(--color-dark) border border-[#3a3a3a] rounded-xl p-4 flex flex-col gap-3 z-50 shadow-xl animate-[fadeIn_0.2s_ease]">
               <button 
                 onClick={() => { navigate('/login'); setMobileMenuOpen(false); }} 
-                className="btn-shimmer bg-(--color-purple) text-(--color-gold) px-6 py-3 rounded-xl font-bold text-lg transition w-full"
+                className="btn-shimmer bg-(--color-green) text-(--color-gold) px-6 py-3 rounded-xl font-bold text-lg transition w-full"
               >
                 { isAuthenticated ? 'Dashboard' : 'Log in'}
               </button>
               <button 
                 onClick={() => { navigate('/signup'); setMobileMenuOpen(false); }} 
-                className="btn-shimmer bg-(--color-purple) text-(--color-gold) px-6 py-3 rounded-xl font-bold text-lg transition w-full"
+                className="btn-shimmer bg-(--color-green) text-(--color-gold) px-6 py-3 rounded-xl font-bold text-lg transition w-full"
               >
                 Sign up
               </button>
@@ -79,7 +79,7 @@ const Landing: React.FC = () => {
           {/* CTA Button */}
             <button onClick={() => navigate('/signup')}
             className="btn-shimmer text-(--color-gold) px-6 sm:px-10 md:px-12 py-3 sm:py-4 md:py-5 rounded-2xl text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold transition shadow-lg hover:-translate-y-0.5 hover:shadow-xl"
-            style={{ background: 'linear-gradient(to bottom right, #7345AF, #7345AF, #1E1E1E, #000000)' }}
+            style={{ background: 'linear-gradient(to bottom right, #10B981, #10B981, #1E1E1E, #000000)' }}
             >
             Get Started
             </button>

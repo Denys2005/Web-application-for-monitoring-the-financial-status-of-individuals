@@ -23,7 +23,7 @@ interface ActivityFeedProps {
  * ActivityFeed Component
  * 
  * Displays a vertical timeline of recent financial events,
- * aligned with the RichFlow "Time Machine" concept.
+ * aligned with the FinCash "Time Machine" concept.
  */
 const ActivityFeed: React.FC<ActivityFeedProps> = ({
   limit = 10,
@@ -120,7 +120,7 @@ const ActivityItem: React.FC<{ event: ActivityEvent }> = ({
         className="absolute left-2 top-1 w-5 h-5 rounded-full flex items-center justify-center text-xs"
         style={{ 
           backgroundColor: 'var(--color-card)',
-          border: '2px solid var(--color-purple)',
+          border: '2px solid var(--color-green)',
         }}
         title={event.entityType}
       >
@@ -131,14 +131,14 @@ const ActivityItem: React.FC<{ event: ActivityEvent }> = ({
       <div 
         className="rounded-lg p-3 transition-all hover:translate-x-1"
         style={{ 
-          backgroundColor: 'rgba(115, 69, 175, 0.1)',
+          backgroundColor: 'rgba(16, 185, 129, 0.1)',
           border: '1px solid var(--color-border)',
         }}
       >
         {/* Description */}
         <p 
           className={`text-sm font-medium ${actionColorClass}`}
-          style={{ color: 'var(--color-purple-lighter)' }}
+          style={{ color: 'var(--color-green-light)' }}
         >
           <span className={actionColorClass}>
             {event.actionType === 'CREATE' && '+ '}

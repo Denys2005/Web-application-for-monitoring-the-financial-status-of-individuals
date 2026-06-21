@@ -1,7 +1,7 @@
 
-# RichFlow Event Log & Analysis System Documentation
+# FinCash Event Log & Analysis System Documentation
 
-**Project:** RichFlow - Personal Finance Management Application  
+**Project:** FinCash - Personal Finance Management Application  
 **Last Updated:** November 26, 2025  
 **Status:** Another Major Feature Implemented
 
@@ -27,7 +27,7 @@
 
 ## Overview
 
-This document details the Event Log and Analysis systems in the RichFlow application. These systems work together to provide users with a complete audit trail of their financial activities and powerful analytical tools to track their journey toward financial freedom.
+This document details the Event Log and Analysis systems in the FinCash application. These systems work together to provide users with a complete audit trail of their financial activities and powerful analytical tools to track their journey toward financial freedom.
 
 ### Key Features
 
@@ -244,7 +244,7 @@ interface FinancialState {
 - **Total Expenses**: Sum of all expenses
 - **Net Cashflow**: Total Income - Total Expenses
 
-#### RichFlow Metrics
+#### FinCash Metrics
 - **Wealth Velocity**: Monthly net worth change (absolute and percentage)
 - **Solvency Ratio**: (Total Liabilities / Total Assets with Cash) × 100
 - **Freedom Gap**: Total Expenses - (Passive Income + Portfolio Income)
@@ -352,7 +352,7 @@ Get financial snapshot for a specific date or current state.
     "passiveCoverageRatio": "41.67",
     "savingsRate": "42.86"
   },
-  "richFlowMetrics": {
+  "finCashMetrics": {
     "wealthVelocity": 4500,
     "wealthVelocityPct": 2.25,
     "solvencyRatio": 20.00,

@@ -29,7 +29,7 @@ export async function getIncomeLinesHandler(req: Request, res: Response, next: N
 export async function addIncomeLineHandler(req: Request, res: Response, next: NextFunction) {
   try {
     const userId = req.user?.userId;
-    const { name, amount, type, quadrant } = req.body;
+    const { name, amount, type, quadrant, accountId } = req.body;
 
     if (!userId) {
       return res.status(401).json({ error: 'Authentication required' });
@@ -64,7 +64,7 @@ export async function addIncomeLineHandler(req: Request, res: Response, next: Ne
       });
     }
 
-    const incomeLine = await addIncomeLine(userId, { name, amount, type, quadrant: normalizedQuadrant ?? null });
+    const incomeLine = await addIncomeLine(userId, { name, amount, type, quadrant: normalizedQuadrant ?? null, accountId: accountId ?? null });
 
     return res.status(201).json({
       message: 'Income line added successfully',
@@ -84,7 +84,7 @@ export async function updateIncomeLineHandler(req: Request, res: Response, next:
   try {
     const userId = req.user?.userId;
   const incomeLineId = parseInt(String(req.params.id), 10);
-    const { name, amount, type, quadrant } = req.body;
+    const { name, amount, type, quadrant, accountId } = req.body;
 
     if (!userId) {
       return res.status(401).json({ error: 'Authentication required' });
@@ -127,7 +127,8 @@ export async function updateIncomeLineHandler(req: Request, res: Response, next:
       name,
       amount,
       type,
-      quadrant: normalizedQuadrant ?? null
+      quadrant: normalizedQuadrant ?? null,
+      accountId: accountId !== undefined ? accountId : null
     });
 
     if (!updatedIncomeLine) {

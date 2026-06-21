@@ -19,6 +19,7 @@ const UserGuide = lazy(() => import('./pages/UserGuide/UserGuide'));
 const Admin = lazy(() => import('./pages/Admin/Admin'));
 const EventLog = lazy(() => import('./pages/EventLog/EventLog'));
 const Analysis = lazy(() => import('./pages/Analysis/Analysis'));
+const AccountsPage = lazy(() => import('./pages/Accounts/AccountsPage'));
 
 // Loading fallback component
 const LoadingSpinner: React.FC = () => (
@@ -39,8 +40,8 @@ const LoadingSpinner: React.FC = () => (
         style={{ 
           width: '40px', 
           height: '40px', 
-          border: '3px solid rgba(115, 69, 175, 0.3)',
-          borderTop: '3px solid #7345AF',
+          border: '3px solid rgba(16, 185, 129, 0.3)',
+          borderTop: '3px solid #10b981',
           borderRadius: '50%',
           animation: 'spin 1s linear infinite',
           margin: '0 auto 1rem'
@@ -95,6 +96,14 @@ root.render(
                   element={
                     <ProtectedRoute>
                       <EventLog />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/accounts"
+                  element={
+                    <ProtectedRoute>
+                      <AccountsPage />
                     </ProtectedRoute>
                   }
                 />

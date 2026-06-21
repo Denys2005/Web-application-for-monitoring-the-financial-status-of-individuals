@@ -22,6 +22,8 @@ export interface IncomeItem {
   amount: number;
   type: IncomeType;
   quadrant: IncomeQuadrant;
+  accountId?: number | null;
+  accountName?: string | null;
 }
 
 export interface NormalizedIncome {
@@ -45,6 +47,7 @@ export interface AddIncomeInput {
   amount: number;
   type: IncomeType;
   quadrant?: IncomeQuadrant;
+  accountId?: number | null;
 }
 
 export interface UpdateIncomeInput extends AddIncomeInput {
@@ -104,6 +107,8 @@ const normalizeIncomeItem = (item: Record<string, unknown>): IncomeItem => {
     amount: typeof item.amount === 'number' ? item.amount : parseFloat(item.amount as string),
     type,
     quadrant: normalizeQuadrant(item.quadrant, typeQuadrantFallback[type]),
+    accountId: item.accountId as number | null,
+    accountName: (item.Account as any)?.name as string | null,
   };
 };
 
@@ -210,7 +215,8 @@ export const useAddIncomeMutation = () => {
         input.name,
         input.amount,
         input.type,
-        resolvedQuadrant
+        resolvedQuadrant,
+        input.accountId
       );
       // API may return { incomeLine: {...} } or the item directly
       const incomeData = response.incomeLine || response;
@@ -285,7 +291,8 @@ export const useUpdateIncomeMutation = () => {
         input.name,
         input.amount,
         input.type,
-        resolvedQuadrant
+        resolvedQuadrant,
+        input.accountId
       );
       const incomeData = response.incomeLine || response;
       return normalizeIncomeItem(incomeData);

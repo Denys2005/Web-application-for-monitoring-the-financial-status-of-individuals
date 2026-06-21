@@ -92,7 +92,7 @@ const FinancialProgressBar: React.FC<FinancialProgressBarProps> = ({
   const getTrackBackground = (): string => {
     switch (variant) {
       case 'purple':
-        return 'rgba(115, 69, 175, 0.2)';
+        return 'rgba(16, 185, 129, 0.2)';
       case 'green':
         return 'rgba(74, 222, 128, 0.2)';
       case 'red':

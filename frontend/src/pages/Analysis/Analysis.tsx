@@ -4,6 +4,7 @@ import Header from '../../components/Header/Header';
 import { useAuth } from '../../context/AuthContext';
 import { useCurrency } from '../../context/CurrencyContext';
 import { analysisAPI } from '../../utils/api';
+import { useAccounts } from '../../hooks/queries/useAccounts';
 import { formatCurrency as formatCurrencyValue, getCurrencySymbol } from '../../utils/currency.utils';
 import {
   PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, Legend,
@@ -33,7 +34,7 @@ type SnapshotData = {
     passiveCoverageRatio: string;
     savingsRate: string;
   };
-  richFlowMetrics: {
+  finCashMetrics: {
     wealthVelocity: number;
     wealthVelocityPct: number;
     solvencyRatio: number;
@@ -81,10 +82,10 @@ type TrajectoryPoint = {
 
 
 const QUADRANT_COLORS = {
-  EMPLOYEE: '#794cb5', // Purple
-  SELF_EMPLOYED: '#eaca6a', // Gold
-  BUSINESS_OWNER: '#41d288', // Green
-  INVESTOR: '#ff7d7e' // Red
+  EMPLOYEE: '#10B981', // Green
+  SELF_EMPLOYED: '#FBBF24', // Gold
+  BUSINESS_OWNER: '#34D399', // Light Green
+  INVESTOR: '#EF4444' // Red
 };
 
 // Helper to format freedom date for display
@@ -125,8 +126,8 @@ const StatCard: React.FC<{
   accentColor?: 'gold' | 'purple' | 'default';
   invertTrendColor?: boolean;
 }> = ({ title, value, subValue, trend, className = '', icon, children, accentColor = 'default', invertTrendColor = false }) => {
-  const borderColor = accentColor === 'gold' ? 'group-hover:border-[#eaca6a]/30' :
-    accentColor === 'purple' ? 'group-hover:border-[#794cb5]/30' :
+  const borderColor = accentColor === 'gold' ? 'group-hover:border-[#FBBF24]/30' :
+    accentColor === 'purple' ? 'group-hover:border-[#10B981]/30' :
       'group-hover:border-white/10';
 
   return (
@@ -169,6 +170,10 @@ const Analysis: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState('');
   const deferredSelectedDate = useDeferredValue(selectedDate);
   const [snapshotData, setSnapshotData] = useState<SnapshotData | null>(null);
+
+  // Accounts
+  const { data: accounts = [] } = useAccounts();
+  const [selectedAccountId, setSelectedAccountId] = useState<number | null>(null);
 
   // Compare state
   const [showCompare, setShowCompare] = useState(false);
@@ -247,7 +252,7 @@ const Analysis: React.FC = () => {
     const startTs = performance.now();
     const slowTimer = setTimeout(() => setSlowSnapshot(true), SLOW_THRESHOLD_MS);
     try {
-      const data = await analysisAPI.getFinancialSnapshot(date);
+      const data = await analysisAPI.getFinancialSnapshot(date, selectedAccountId || undefined);
       if (reqId !== snapshotReqIdRef.current) return; // stale
       setSnapshotData(data);
       if (!date) setSelectedDate('');
@@ -262,7 +267,7 @@ const Analysis: React.FC = () => {
 
   useEffect(() => {
     fetchSnapshot();
-  }, [currency]);
+  }, [currency, selectedAccountId]);
 
   useEffect(() => {
     if (deferredSelectedDate) {
@@ -313,8 +318,8 @@ const Analysis: React.FC = () => {
     const slowTimer = setTimeout(() => setSlowCompare(true), SLOW_THRESHOLD_MS);
     try {
       const [startSnap, endSnap] = await Promise.all([
-        analysisAPI.getFinancialSnapshot(compareStart),
-        analysisAPI.getFinancialSnapshot(compareEnd),
+        analysisAPI.getFinancialSnapshot(compareStart, selectedAccountId || undefined),
+        analysisAPI.getFinancialSnapshot(compareEnd, selectedAccountId || undefined),
       ]);
       if (reqId !== compareReqIdRef.current) return; // stale
       setCompareResult({ start: startSnap, end: endSnap });
@@ -337,7 +342,8 @@ const Analysis: React.FC = () => {
       const data = await analysisAPI.getFinancialTrajectory(
         trajectoryStart,
         trajectoryEnd,
-        trajectoryInterval
+        trajectoryInterval,
+        selectedAccountId || undefined
       );
       setTrajectoryData(data);
     } catch (e) {
@@ -375,7 +381,7 @@ const Analysis: React.FC = () => {
   useEffect(() => {
     if (trajectoryStart && trajectoryEnd) fetchTrajectoryData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [trajectoryStart, trajectoryEnd, trajectoryInterval, currency]);
+  }, [trajectoryStart, trajectoryEnd, trajectoryInterval, currency, selectedAccountId]);
 
   const compareMetrics = useMemo(() => {
     if (!compareResult) return null;
@@ -588,17 +594,27 @@ const Analysis: React.FC = () => {
     </div>
   );
 
-  // Header right content (timeline + compare toggle)
+  // Header right content (timeline + compare toggle + account selector)
   const headerRight = (
-    <div className="analysis-header-right">
+    <div className="analysis-header-right flex items-center gap-4">
+      <select 
+        className="bg-zinc-900 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white outline-none focus:border-[#d4af37]"
+        value={selectedAccountId || ''}
+        onChange={(e) => setSelectedAccountId(e.target.value ? Number(e.target.value) : null)}
+      >
+        <option value="">All Accounts</option>
+        {accounts.map(acc => (
+          <option key={acc.id} value={acc.id}>{acc.name}</option>
+        ))}
+      </select>
       {timelineController}
-
-      <button
-        onClick={() => setShowCompare(s => !s)}
-        aria-pressed={showCompare}
-        className={`compare-button ${showCompare ? 'active' : 'inactive'}`}
-        title="Compare two dates"
-      >Compare</button>
+      <button 
+        onClick={() => setShowCompare(!showCompare)} 
+        className={`time-machine-compare-btn ${showCompare ? 'active' : ''}`}
+        title="Compare historical snapshots"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
+      </button>
     </div>
   );
 
@@ -650,8 +666,8 @@ const Analysis: React.FC = () => {
         />
         <div className="flex-1 flex flex-col overflow-hidden relative">
           {/* Background Ambient Glow */}
-          <div className="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-[#794cb5]/20 rounded-full blur-[120px] pointer-events-none" />
-          <div className="absolute bottom-[-20%] left-[-10%] w-[600px] h-[600px] bg-[#eaca6a]/10 rounded-full blur-[120px] pointer-events-none" />
+          <div className="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-[#10B981]/20 rounded-full blur-[120px] pointer-events-none" />
+          <div className="absolute bottom-[-20%] left-[-10%] w-[600px] h-[600px] bg-[#FBBF24]/10 rounded-full blur-[120px] pointer-events-none" />
           <main className="flex-1 overflow-y-auto p-6 md:p-8 scrollbar-thin scrollbar-thumb-zinc-800 scrollbar-track-transparent">
             {(snapshotError || compareError || trajectoryError) && (
               <div className="max-w-7xl mx-auto mb-4 space-y-2">
@@ -1010,12 +1026,12 @@ const Analysis: React.FC = () => {
                   <StatCard
                     title="Wealth Velocity"
                     value={
-                      <span className={snapshotData.richFlowMetrics.wealthVelocity >= 0 ? 'text-[#41d288]' : 'text-[#ff7d7e]'}>
-                        {snapshotData.richFlowMetrics.wealthVelocity >= 0 ? '+' : ''}
-                        {formatCurrent(snapshotData.richFlowMetrics.wealthVelocity)}
+                      <span className={snapshotData.finCashMetrics.wealthVelocity >= 0 ? 'text-[#41d288]' : 'text-[#ff7d7e]'}>
+                        {snapshotData.finCashMetrics.wealthVelocity >= 0 ? '+' : ''}
+                        {formatCurrent(snapshotData.finCashMetrics.wealthVelocity)}
                       </span>
                     }
-                    trend={snapshotData.richFlowMetrics.wealthVelocityPct}
+                    trend={snapshotData.finCashMetrics.wealthVelocityPct}
                     className="col-span-2 md:col-span-1"
                   >
                     <div className="mt-1 text-xs text-zinc-500">Monthly Net Worth Change</div>
@@ -1023,20 +1039,20 @@ const Analysis: React.FC = () => {
 
                   <StatCard
                     title="Solvency Ratio"
-                    value={`${snapshotData.richFlowMetrics.solvencyRatio}%`}
+                    value={`${snapshotData.finCashMetrics.solvencyRatio}%`}
                     className="col-span-2 md:col-span-1"
                   >
                     <div className="mt-2 h-1.5 w-full bg-zinc-800 rounded-full overflow-hidden">
                       <div
-                        className={`h-full ${snapshotData.richFlowMetrics.solvencyRatio < 30 ? 'bg-[#41d288]' :
-                          snapshotData.richFlowMetrics.solvencyRatio < 60 ? 'bg-[#eaca6a]' : 'bg-[#ff7d7e]'
+                        className={`h-full ${snapshotData.finCashMetrics.solvencyRatio < 30 ? 'bg-[#41d288]' :
+                          snapshotData.finCashMetrics.solvencyRatio < 60 ? 'bg-[#eaca6a]' : 'bg-[#ff7d7e]'
                           }`}
-                        style={{ width: `${Math.min(snapshotData.richFlowMetrics.solvencyRatio, 100)}%` }}
+                        style={{ width: `${Math.min(snapshotData.finCashMetrics.solvencyRatio, 100)}%` }}
                       />
                     </div>
                     <div className="mt-1 text-xs text-zinc-500">
-                      {snapshotData.richFlowMetrics.solvencyRatio < 30 ? 'Safe (<30%)' :
-                        snapshotData.richFlowMetrics.solvencyRatio < 60 ? 'Caution (30-60%)' : 'High Risk (>60%)'}
+                      {snapshotData.finCashMetrics.solvencyRatio < 30 ? 'Safe (<30%)' :
+                        snapshotData.finCashMetrics.solvencyRatio < 60 ? 'Caution (30-60%)' : 'High Risk (>60%)'}
                     </div>
                   </StatCard>
 
@@ -1203,19 +1219,19 @@ const Analysis: React.FC = () => {
                   className="col-span-1"
                 />
                 <StatCard
-                  title={snapshotData.richFlowMetrics.freedomGap > 0 ? "Freedom Gap" : "Financial Freedom"}
+                  title={snapshotData.finCashMetrics.freedomGap > 0 ? "Freedom Gap" : "Financial Freedom"}
                   value={
-                    snapshotData.richFlowMetrics.freedomGap <= 0 ? (
+                    snapshotData.finCashMetrics.freedomGap <= 0 ? (
                       <span className="text-[#eaca6a] font-bold">ACHIEVED</span>
                     ) : (
                       <span className="text-[#ff7d7e]">
-                        -{formatHistorical(Math.abs(snapshotData.richFlowMetrics.freedomGap), snapshotData.currency)}
+                        -{formatHistorical(Math.abs(snapshotData.finCashMetrics.freedomGap), snapshotData.currency)}
                       </span>
                     )
                   }
-                  subValue={snapshotData.richFlowMetrics.freedomGap > 0 ? "To Go" : "Passive Income Covers Expenses"}
+                  subValue={snapshotData.finCashMetrics.freedomGap > 0 ? "To Go" : "Passive Income Covers Expenses"}
                   className="col-span-1"
-                  accentColor={snapshotData.richFlowMetrics.freedomGap > 0 ? 'default' : 'gold'}
+                  accentColor={snapshotData.finCashMetrics.freedomGap > 0 ? 'default' : 'gold'}
                 />
 
               </div>
@@ -1285,7 +1301,7 @@ const Analysis: React.FC = () => {
                       value={formatCurrencyValue(trajectoryMetrics.passiveIncome.change, currency)}
                       subValue={`${trajectoryMetrics.passiveIncome.growthRate.toFixed(1)}% increase`}
                       trend={trajectoryMetrics.passiveIncome.growthRate}
-                      accentColor="purple"
+                      accentColor="default"
                     />
                   </div>
 
@@ -1389,7 +1405,7 @@ const Analysis: React.FC = () => {
                             <YAxis
                               yAxisId="right"
                               orientation="right"
-                              stroke="#794cb5"
+                              stroke="#10b981"
                               tickFormatter={(val) => `${val.toFixed(1)}%`}
                               tick={{ fontSize: 12 }}
                               domain={['auto', 'auto']}
@@ -1397,7 +1413,7 @@ const Analysis: React.FC = () => {
                             <RechartsTooltip content={<ChartTooltip />} />
                             <Legend iconSize={10} wrapperStyle={{ paddingTop: '10px', fontSize: '12px' }} verticalAlign="bottom" />
                             <Line yAxisId="left" type="monotone" dataKey="netWorth" name="Net Worth" stroke="#eaca6a" strokeWidth={2} dot={false} />
-                            <Bar yAxisId="right" dataKey="netWorthDelta" name="Wealth Velocity" fill="#794cb5" radius={[4, 4, 0, 0]} />
+                            <Bar yAxisId="right" dataKey="netWorthDelta" name="Wealth Velocity" fill="#10b981" radius={[4, 4, 0, 0]} />
                             {processedTrajectory.filter(p => p.currencyChanged).map(p => (
                               <ReferenceLine key={`cur-nw-${p.date}`} x={p.date} stroke="#eaca6a" strokeDasharray="4 2" />
                             ))}
@@ -1409,7 +1425,7 @@ const Analysis: React.FC = () => {
                     {/* 3. Asset Efficiency Trend */}
                     <div className="p-3 md:p-6 rounded-xl bg-zinc-900/50 border border-white/5">
                       <h3 className="text-zinc-400 text-sm font-medium uppercase tracking-wider mb-2 md:mb-4 flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-[#794cb5]"></span>
+                        <span className="w-2 h-2 rounded-full bg-[#10b981]"></span>
                         Asset Efficiency (ROA)
                       </h3>
                       <div className="w-full h-80 chart-container-responsive" style={{ width: '100%', height: 320, minHeight: 320, position: 'relative' }}>
@@ -1417,8 +1433,8 @@ const Analysis: React.FC = () => {
                           <LineChart data={processedTrajectory} margin={{ top: 5, right: 20, bottom: 60, left: 10 }}>
                             <defs>
                               <linearGradient id="colorEfficiency" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="#794cb5" stopOpacity={0.3} />
-                                <stop offset="95%" stopColor="#794cb5" stopOpacity={0} />
+                                <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
+                                <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
                               </linearGradient>
                             </defs>
                             <CartesianGrid strokeDasharray="3 3" stroke="#333" vertical={false} />
@@ -1438,7 +1454,7 @@ const Analysis: React.FC = () => {
                             />
                             <RechartsTooltip content={<ChartTooltip />} />
                             <Legend iconSize={10} wrapperStyle={{ paddingTop: '10px', fontSize: '12px' }} verticalAlign="bottom" />
-                            <Line type="monotone" dataKey="assetEfficiency" name="Return on Assets" stroke="#794cb5" strokeWidth={2} dot={false} />
+                            <Line type="monotone" dataKey="assetEfficiency" name="Return on Assets" stroke="#10b981" strokeWidth={2} dot={false} />
                             {processedTrajectory.filter(p => p.currencyChanged).map(p => (
                               <ReferenceLine key={`cur-roa-${p.date}`} x={p.date} stroke="#eaca6a" strokeDasharray="4 2" />
                             ))}

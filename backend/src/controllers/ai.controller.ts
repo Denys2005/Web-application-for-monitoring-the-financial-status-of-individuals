@@ -21,8 +21,8 @@ export async function analyzeFinanceController(req: Request, res: Response, next
     }
 
     return res.status(200).json( {success: true, data: financialInformation});
-    } catch (error) {
+    } catch (error: any) {
     console.error('Getting information error:', error);
-    return res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: 'Internal server error', details: error?.message || String(error) });
   }
 }

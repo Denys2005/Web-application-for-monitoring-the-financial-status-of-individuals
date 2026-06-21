@@ -12,28 +12,28 @@ const UserGuide: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen p-4 sm:p-8 flex justify-center items-start" style={{ background: 'linear-gradient(to bottom right, #7345AF, #7345AF, #1E1E1E, #000000)' }}>
-      <div className="max-w-[900px] w-full bg-[#1a1a1a] rounded-xl p-6 sm:p-12 shadow-lg">
-        <h1 className="text-(--color-gold) text-2xl sm:text-4xl font-bold mb-6 text-center border-b-[3px] border-(--color-gold) pb-4">Welcome to RichFlow!</h1>
+    <div className="min-h-screen p-4 sm:p-8 flex justify-center items-start" style={{ background: 'linear-gradient(to bottom right, #10B981, #10B981, #0A0F0D, #000000)' }}>
+      <div className="max-w-[900px] w-full bg-[#0D1412] rounded-xl p-6 sm:p-12 shadow-lg border border-[#1A2E2A]">
+        <h1 className="text-(--color-gold) text-2xl sm:text-4xl font-bold mb-6 text-center border-b-[3px] border-(--color-gold) pb-4">Welcome to FinCash!</h1>
         
         <p className="text-white text-base sm:text-lg leading-relaxed mb-8 text-center font-light">
-          Hello there, and a warm welcome to the RichFlow family! We're thrilled to have you on board. 
+          Hello there, and a warm welcome to the FinCash family! We're thrilled to have you on board. 
           You've just taken a powerful first step towards mastering your money and building a future of 
           financial freedom. Let's get you started on this exciting journey!
         </p>
 
         {/* Table of Contents */}
-        <nav className="bg-linear-to-br from-[rgba(115,69,175,0.15)] to-[rgba(30,30,30,0.8)] border border-[rgba(237,202,105,0.3)] rounded-xl px-4 sm:px-8 py-6 mb-12">
+        <nav className="bg-linear-to-br from-[rgba(16,185,129,0.15)] to-[rgba(10,15,13,0.8)] border border-[rgba(237,202,105,0.3)] rounded-xl px-4 sm:px-8 py-6 mb-12">
           <h2 className="text-(--color-gold) text-lg sm:text-xl font-semibold mb-5 text-center border-b-2 border-[rgba(237,202,105,0.3)] pb-3">Table of Contents</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8">
             <div className="flex flex-col gap-2">
-              <div className="text-(--color-gold) text-xs font-semibold uppercase tracking-wider mt-4 first:mt-0 mb-2 pl-2 border-l-[3px] border-(--color-purple)">Getting Started</div>
+              <div className="text-(--color-gold) text-xs font-semibold uppercase tracking-wider mt-4 first:mt-0 mb-2 pl-2 border-l-[3px] border-(--color-green)">Getting Started</div>
               <ul className="list-none p-0 m-0">
-                <li className="mb-1"><button onClick={() => scrollToSection('what-is-richflow')} className="bg-none border-none text-gray-300 text-sm sm:text-base cursor-pointer py-1.5 px-3 text-left w-full rounded-md transition-all hover:text-(--color-gold) hover:bg-[rgba(237,202,105,0.1)] hover:pl-4">What is RichFlow?</button></li>
+                <li className="mb-1"><button onClick={() => scrollToSection('what-is-fincash')} className="bg-none border-none text-gray-300 text-sm sm:text-base cursor-pointer py-1.5 px-3 text-left w-full rounded-md transition-all hover:text-(--color-gold) hover:bg-[rgba(237,202,105,0.1)] hover:pl-4">What is FinCash?</button></li>
                 <li className="mb-1"><button onClick={() => scrollToSection('dashboard-tour')} className="bg-none border-none text-gray-300 text-sm sm:text-base cursor-pointer py-1.5 px-3 text-left w-full rounded-md transition-all hover:text-(--color-gold) hover:bg-[rgba(237,202,105,0.1)] hover:pl-4">Your Financial Dashboard</button></li>
               </ul>
               
-              <div className="text-(--color-gold) text-xs font-semibold uppercase tracking-wider mt-4 mb-2 pl-2 border-l-[3px] border-(--color-purple)">Advanced Features</div>
+              <div className="text-(--color-gold) text-xs font-semibold uppercase tracking-wider mt-4 mb-2 pl-2 border-l-[3px] border-(--color-green)">Advanced Features</div>
               <ul className="list-none p-0 m-0">
                 <li className="mb-1"><button onClick={() => scrollToSection('analysis-page')} className="bg-none border-none text-gray-300 text-sm sm:text-base cursor-pointer py-1.5 px-3 text-left w-full rounded-md transition-all hover:text-(--color-gold) hover:bg-[rgba(237,202,105,0.1)] hover:pl-4">The Analysis Page</button></li>
                 <li className="mb-1"><button onClick={() => scrollToSection('trajectory-charts')} className="bg-none border-none text-gray-300 text-sm sm:text-base cursor-pointer py-1.5 px-3 text-left w-full rounded-md transition-all hover:text-(--color-gold) hover:bg-[rgba(237,202,105,0.1)] hover:pl-4">Financial Trajectory Charts</button></li>
@@ -42,15 +42,15 @@ const UserGuide: React.FC = () => {
             </div>
             
             <div className="flex flex-col gap-2">
-              <div className="text-(--color-gold) text-xs font-semibold uppercase tracking-wider mt-4 first:mt-0 mb-2 pl-2 border-l-[3px] border-(--color-purple)">Key Concepts</div>
+              <div className="text-(--color-gold) text-xs font-semibold uppercase tracking-wider mt-4 first:mt-0 mb-2 pl-2 border-l-[3px] border-(--color-green)">Key Concepts</div>
               <ul className="list-none p-0 m-0">
                 <li className="mb-1"><button onClick={() => scrollToSection('cashflow-quadrant')} className="bg-none border-none text-gray-300 text-sm sm:text-base cursor-pointer py-1.5 px-3 text-left w-full rounded-md transition-all hover:text-(--color-gold) hover:bg-[rgba(237,202,105,0.1)] hover:pl-4">The CASHFLOW Quadrant</button></li>
-                <li className="mb-1"><button onClick={() => scrollToSection('terminology')} className="bg-none border-none text-gray-300 text-sm sm:text-base cursor-pointer py-1.5 px-3 text-left w-full rounded-md transition-all hover:text-(--color-gold) hover:bg-[rgba(237,202,105,0.1)] hover:pl-4">RichFlow Terminology</button></li>
+                <li className="mb-1"><button onClick={() => scrollToSection('terminology')} className="bg-none border-none text-gray-300 text-sm sm:text-base cursor-pointer py-1.5 px-3 text-left w-full rounded-md transition-all hover:text-(--color-gold) hover:bg-[rgba(237,202,105,0.1)] hover:pl-4">FinCash Terminology</button></li>
               </ul>
               
-              <div className="text-(--color-gold) text-xs font-semibold uppercase tracking-wider mt-4 mb-2 pl-2 border-l-[3px] border-(--color-purple)">Best Practices</div>
+              <div className="text-(--color-gold) text-xs font-semibold uppercase tracking-wider mt-4 mb-2 pl-2 border-l-[3px] border-(--color-green)">Best Practices</div>
               <ul className="list-none p-0 m-0">
-                <li className="mb-1"><button onClick={() => scrollToSection('how-to-use')} className="bg-none border-none text-gray-300 text-sm sm:text-base cursor-pointer py-1.5 px-3 text-left w-full rounded-md transition-all hover:text-(--color-gold) hover:bg-[rgba(237,202,105,0.1)] hover:pl-4">How to Use RichFlow Wisely</button></li>
+                <li className="mb-1"><button onClick={() => scrollToSection('how-to-use')} className="bg-none border-none text-gray-300 text-sm sm:text-base cursor-pointer py-1.5 px-3 text-left w-full rounded-md transition-all hover:text-(--color-gold) hover:bg-[rgba(237,202,105,0.1)] hover:pl-4">How to Use FinCash Wisely</button></li>
                 <li className="mb-1"><button onClick={() => scrollToSection('path-to-freedom')} className="bg-none border-none text-gray-300 text-sm sm:text-base cursor-pointer py-1.5 px-3 text-left w-full rounded-md transition-all hover:text-(--color-gold) hover:bg-[rgba(237,202,105,0.1)] hover:pl-4">Path to Financial Freedom</button></li>
                 <li className="mb-1"><button onClick={() => scrollToSection('journey-starts')} className="bg-none border-none text-gray-300 text-sm sm:text-base cursor-pointer py-1.5 px-3 text-left w-full rounded-md transition-all hover:text-(--color-gold) hover:bg-[rgba(237,202,105,0.1)] hover:pl-4">Your Journey Starts Now</button></li>
               </ul>
@@ -58,19 +58,19 @@ const UserGuide: React.FC = () => {
           </div>
         </nav>
 
-        <section id="what-is-richflow" className="mb-10 scroll-mt-4">
-          <h2 className="text-(--color-gold) text-xl sm:text-2xl font-semibold mb-4 border-l-4 border-(--color-gold) pl-4">What is RichFlow? The 'Why' Behind Your Wealth</h2>
+        <section id="what-is-fincash" className="mb-10 scroll-mt-4">
+          <h2 className="text-(--color-gold) text-xl sm:text-2xl font-semibold mb-4 border-l-4 border-(--color-gold) pl-4">What is FinCash? The 'Why' Behind Your Wealth</h2>
           <p className="text-gray-300 text-sm sm:text-base leading-relaxed mb-4">
             Ever felt like you're stuck in a loop of earning and spending, without ever getting ahead? 
             Robert Kiyosaki, in his groundbreaking book "Rich Dad Poor Dad," calls this the 'Rat Race.' 
-            RichFlow is your digital key to breaking free from that cycle.
+            FinCash is your digital key to breaking free from that cycle.
           </p>
           <p className="text-gray-300 text-sm sm:text-base leading-relaxed mb-4">
-            We built RichFlow based on one simple, yet profound, principle from the book: 
+            We built FinCash based on one simple, yet profound, principle from the book: 
             <strong className="text-(--color-gold) font-semibold"> It's not about how much money you make. It's about how much money you keep.</strong>
           </p>
           <p className="text-gray-300 text-sm sm:text-base leading-relaxed mb-4">
-            RichFlow helps you do exactly that. It's a personal finance tracker that lets you <em className="text-white italic">see</em> exactly 
+            FinCash helps you do exactly that. It's a personal finance tracker that lets you <em className="text-white italic">see</em> exactly 
             where your money is going, <em className="text-white italic">track</em> your income and expense sources, and most importantly, <em className="text-white italic">visualize</em> your cash flow. 
             By understanding your financial statement, you can start making informed decisions to grow 
             your wealth and secure your financial future.
@@ -78,7 +78,7 @@ const UserGuide: React.FC = () => {
         </section>
 
         <section id="dashboard-tour" className="mb-10 scroll-mt-4">
-          <h2 className="text-(--color-gold) text-xl sm:text-2xl font-semibold mb-4 border-l-4 border-(--color-gold) pl-4">A Quick Tour of RichFlow: Your Financial Dashboard</h2>
+          <h2 className="text-(--color-gold) text-xl sm:text-2xl font-semibold mb-4 border-l-4 border-(--color-gold) pl-4">A Quick Tour of FinCash: Your Financial Dashboard</h2>
           <p className="text-gray-300 text-sm sm:text-base leading-relaxed mb-4">Let's walk through the features that will become your command center for building wealth.</p>
           <ul className="list-none pl-0 mt-4">
             <li className="text-gray-300 text-sm sm:text-base leading-relaxed mb-4 pl-6 relative before:content-['●'] before:text-(--color-gold) before:text-lg before:absolute before:left-0 before:top-0">
@@ -113,7 +113,7 @@ const UserGuide: React.FC = () => {
               They will also appear on the summary section as your total net worth.
             </li>
             <li className="text-gray-300 text-sm sm:text-base leading-relaxed mb-4 pl-6 relative before:content-['●'] before:text-(--color-gold) before:text-lg before:absolute before:left-0 before:top-0">
-              <strong className="text-(--color-gold) font-semibold">Saki AI Assistant:</strong> Saki is RichFlow's integrated AI assistant that gathers the data from your summary section and statements 
+              <strong className="text-(--color-gold) font-semibold">Saki AI Assistant:</strong> Saki is FinCash's integrated AI assistant that gathers the data from your summary section and statements 
               and turns them into brief insights and actionable tips on the end of the user.
             </li>
           </ul>
@@ -122,7 +122,7 @@ const UserGuide: React.FC = () => {
         <section id="analysis-page" className="guide-section">
           <h2>The Analysis Page: Your Financial X-Ray</h2>
           <p>
-            The Analysis page is one of RichFlow's most powerful features—it's where your financial data transforms into 
+            The Analysis page is one of FinCash's most powerful features—it's where your financial data transforms into 
             actionable intelligence. Here, you'll find deep insights into your financial trajectory, based on 
             Robert Kiyosaki's principles of wealth-building and the CASHFLOW Quadrant.
           </p>
@@ -139,7 +139,7 @@ const UserGuide: React.FC = () => {
             </li>
             <li>
               <strong>Freedom Date Projection:</strong> This is your estimated date of financial freedom—the day when your 
-              passive and portfolio income will cover all your expenses. RichFlow calculates this based on your current 
+              passive and portfolio income will cover all your expenses. FinCash calculates this based on your current 
               trajectory. The closer you get, the more your money works for you instead of the other way around.
             </li>
             <li>
@@ -158,7 +158,7 @@ const UserGuide: React.FC = () => {
               your money is fully working for you!
             </li>
             <li>
-              <strong>Income Quadrant Analysis:</strong> Based on Kiyosaki's CASHFLOW Quadrant, RichFlow categorizes your 
+              <strong>Income Quadrant Analysis:</strong> Based on Kiyosaki's CASHFLOW Quadrant, FinCash categorizes your 
               income into four types: <strong>Employee (E)</strong>, <strong>Self-Employed (S)</strong>, 
               <strong>Business Owner (B)</strong>, and <strong>Investor (I)</strong>. The goal is to shift your income 
               from the left side (E/S) to the right side (B/I), where true wealth and freedom are built.
@@ -192,7 +192,7 @@ const UserGuide: React.FC = () => {
           </p>
           <ul className="feature-list">
             <li>
-              <strong>The Rat Race Escape Chart:</strong> This is perhaps the most important visualization in RichFlow. 
+              <strong>The Rat Race Escape Chart:</strong> This is perhaps the most important visualization in FinCash. 
               It plots your <em>Passive + Portfolio Income</em> (the green line) against your <em>Total Expenses</em> (the red line). 
               The moment these lines cross—when passive income exceeds expenses—marks your escape from the Rat Race. 
               A green dot will appear at this crossover point, celebrating your achievement!
@@ -255,7 +255,7 @@ const UserGuide: React.FC = () => {
           <h2>Understanding the CASHFLOW Quadrant</h2>
           <p>
             One of Robert Kiyosaki's most influential teachings is the CASHFLOW Quadrant, which divides income 
-            earners into four categories. RichFlow tracks which quadrant your income comes from and helps you 
+            earners into four categories. FinCash tracks which quadrant your income comes from and helps you 
             strategize your shift toward financial freedom.
           </p>
           <ul className="terminology-list">
@@ -281,14 +281,14 @@ const UserGuide: React.FC = () => {
           </ul>
           <p>
             <strong>The Goal:</strong> Kiyosaki teaches that true financial freedom comes from moving your income 
-            from the left side (E & S) to the right side (B & I) of the quadrant. RichFlow's Income Quadrant chart 
+            from the left side (E & S) to the right side (B & I) of the quadrant. FinCash's Income Quadrant chart 
             helps you visualize and track this transition over time.
           </p>
         </section>
 
         <section id="terminology" className="guide-section">
-          <h2>RichFlow Terminology: Speaking the Language of Wealth</h2>
-          <p>To get the most out of RichFlow, it helps to understand these key terms from "Rich Dad Poor Dad":</p>
+          <h2>FinCash Terminology: Speaking the Language of Wealth</h2>
+          <p>To get the most out of FinCash, it helps to understand these key terms from "Rich Dad Poor Dad":</p>
           <ul className="terminology-list">
             <li>
               <strong>Earned Income:</strong> Income that you make in exchange for your time and effort, like your salary or wages from a job,
@@ -305,7 +305,7 @@ const UserGuide: React.FC = () => {
             </li>
             <li>
               <strong>Asset:</strong> Anything that puts money in your pocket/savings. This could be a rental property, 
-              stocks, bonds, or a business that generates income. In RichFlow, you'll log these to see how they 
+              stocks, bonds, or a business that generates income. In FinCash, you'll log these to see how they 
               contribute to your income.
             </li>
             <li>
@@ -319,16 +319,16 @@ const UserGuide: React.FC = () => {
             </li>
             <li>
               <strong>The Rat Race:</strong> The cycle of living paycheck to paycheck, where an increase in earnings 
-              is often met with an increase in spending, preventing you from ever getting ahead. RichFlow is your 
+              is often met with an increase in spending, preventing you from ever getting ahead. FinCash is your 
               tool to escape it.
             </li>
             <li>
               <strong>Financial Independence/Freedom:</strong> The point at which your income from assets is enough to cover 
-              all your living expenses. This is the ultimate goal, and RichFlow will help you map your path to get there.
+              all your living expenses. This is the ultimate goal, and FinCash will help you map your path to get there.
             </li>
             <li>
               <strong>Wealth Velocity:</strong> The rate at which your net worth is growing. Positive velocity means 
-              you're building wealth faster than you're spending it—a key metric tracked in RichFlow's Analysis page.
+              you're building wealth faster than you're spending it—a key metric tracked in FinCash's Analysis page.
             </li>
             <li>
               <strong>Freedom Gap:</strong> The difference between your passive/portfolio income and your total expenses. 
@@ -342,15 +342,15 @@ const UserGuide: React.FC = () => {
         </section>
 
         <section id="how-to-use" className="guide-section">
-          <h2>How to Use RichFlow Wisely</h2>
+          <h2>How to Use FinCash Wisely</h2>
           <p>
-            RichFlow is a flexible tool, but here's an ideal approach to get you started on the right foot, 
+            FinCash is a flexible tool, but here's an ideal approach to get you started on the right foot, 
             inspired by the principles of "Rich Dad Poor Dad."
           </p>
           <ul className="tips-list">
             <li>
               <strong>Be Consistent:</strong> Make it a habit to update and track your finances frequently. Whether you choose to do it 
-              daily, weekly, or monthly, consistency is key. An ideal way to use RichFlow, for example, is to track your data in your income statement and balance sheet
+              daily, weekly, or monthly, consistency is key. An ideal way to use FinCash, for example, is to track your data in your income statement and balance sheet
               on a monthly basis: that is, at the end of each month, log all your income, expenses, assets, and liabilities.
             </li>
             <li>
@@ -359,7 +359,7 @@ const UserGuide: React.FC = () => {
             </li>
             <li>
               <strong>"Mind the Business That Pays You":</strong> Your primary job pays the bills, but your focus 
-              should be on building your asset column. Use the insights from RichFlow to identify where you can cut 
+              should be on building your asset column. Use the insights from FinCash to identify where you can cut 
               back on liabilities and redirect that money into acquiring assets.
             </li>
             <li>
@@ -388,9 +388,9 @@ const UserGuide: React.FC = () => {
               income—even a small dividend counts!
             </li>
             <li>
-              <strong>Experiment and Learn:</strong> RichFlow is your financial sandbox. Don't be afraid to try 
+              <strong>Experiment and Learn:</strong> FinCash is your financial sandbox. Don't be afraid to try 
               different strategies. What happens if you reduce a certain expense? How quickly can you pay down a 
-              liability? Use the app to model different scenarios. While RichFlow provides a framework, your financial 
+              liability? Use the app to model different scenarios. While FinCash provides a framework, your financial 
               journey is unique to you.
             </li>
           </ul>
@@ -399,13 +399,13 @@ const UserGuide: React.FC = () => {
         <section id="path-to-freedom" className="guide-section">
           <h2>The Path to Financial Freedom: A Step-by-Step Guide</h2>
           <p>
-            Based on Kiyosaki's teachings, here's how to use RichFlow to systematically build your path to financial 
+            Based on Kiyosaki's teachings, here's how to use FinCash to systematically build your path to financial 
             freedom:
           </p>
           <ul className="tips-list">
             <li>
               <strong>Step 1 - Know Your Numbers:</strong> Start by entering all your current income sources, expenses, 
-              assets, and liabilities into RichFlow. Get an accurate picture of where you stand today. Check your 
+              assets, and liabilities into FinCash. Get an accurate picture of where you stand today. Check your 
               Net Worth on the Analysis page—this is your starting point.
             </li>
             <li>
@@ -443,17 +443,17 @@ const UserGuide: React.FC = () => {
         <section id="journey-starts" className="mb-10 scroll-mt-4">
           <h2 className="text-(--color-gold) text-xl sm:text-2xl font-semibold mb-4 border-l-4 border-(--color-gold) pl-4">Your Journey Starts Now</h2>
           <p className="text-gray-300 text-sm sm:text-base leading-relaxed mb-4">
-            Thank you for choosing RichFlow as your partner in building wealth. Remember, the path to financial 
+            Thank you for choosing FinCash as your partner in building wealth. Remember, the path to financial 
             independence is a marathon, not a sprint. Every entry you make, every insight you gain, is a step in 
             the right direction.
           </p>
           <p className="text-gray-300 text-sm sm:text-base leading-relaxed mb-4">
             As Robert Kiyosaki says: <em className="text-white italic">"The single most powerful asset we all have is our mind. If it is 
-            trained well, it can create enormous wealth."</em> RichFlow is here to train your financial mind 
+            trained well, it can create enormous wealth."</em> FinCash is here to train your financial mind 
             and give you the tools to create that wealth.
           </p>
           <p className="text-base sm:text-lg font-medium text-(--color-gold) text-center mt-6">
-            Welcome once again to RichFlow. We can't wait to see you escape the Rat Race and thrive!
+            Welcome once again to FinCash. We can't wait to see you escape the Rat Race and thrive!
           </p>
         </section>
 
@@ -462,7 +462,7 @@ const UserGuide: React.FC = () => {
         </button>
 
         <footer className="mt-12 pt-6 border-t border-[#333] text-center text-gray-500 text-sm">
-          <p>© 2025 RichFlow.</p>
+          <p>© 2025 FinCash.</p>
           <div className="mt-2">
             <span className="text-(--color-gold) cursor-pointer transition-colors hover:text-[#f2d06b] hover:underline">About Us</span> - <span className="text-(--color-gold) cursor-pointer transition-colors hover:text-[#f2d06b] hover:underline">Privacy Policy</span> - <span className="text-(--color-gold) cursor-pointer transition-colors hover:text-[#f2d06b] hover:underline">Contact Support</span>
           </div>

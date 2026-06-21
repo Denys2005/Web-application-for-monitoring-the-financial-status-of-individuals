@@ -28,7 +28,7 @@ export async function getExpensesHandler(req: Request, res: Response, next: Next
 export async function addExpenseHandler(req: Request, res: Response, next: NextFunction) {
   try {
     const userId = req.user?.userId;
-    const { name, amount } = req.body;
+    const { name, amount, categoryId, accountId } = req.body;
 
     if (!userId) {
       return res.status(401).json({ error: 'Authentication required' });
@@ -45,7 +45,7 @@ export async function addExpenseHandler(req: Request, res: Response, next: NextF
       return res.status(400).json({ error: 'Amount cannot be negative' });
     }
 
-    const expense = await addExpense(userId, { name, amount });
+    const expense = await addExpense(userId, { name, amount, categoryId: categoryId ?? null, accountId: accountId ?? null });
 
     return res.status(201).json({
       message: 'Expense added successfully',
@@ -65,7 +65,7 @@ export async function updateExpenseHandler(req: Request, res: Response, next: Ne
   try {
     const userId = req.user?.userId;
     const expenseId = parseInt(String(req.params.id), 10);
-    const { name, amount } = req.body;
+    const { name, amount, categoryId, accountId } = req.body;
 
     if (!userId) {
       return res.status(401).json({ error: 'Authentication required' });
@@ -88,7 +88,9 @@ export async function updateExpenseHandler(req: Request, res: Response, next: Ne
 
     const updatedExpense = await updateExpense(userId, expenseId, {
       name,
-      amount
+      amount,
+      categoryId: categoryId !== undefined ? categoryId : null,
+      accountId: accountId !== undefined ? accountId : null
     });
 
     if (!updatedExpense) {

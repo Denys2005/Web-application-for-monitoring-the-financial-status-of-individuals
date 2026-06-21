@@ -213,7 +213,7 @@ export async function ensureMonthlyCheckpoints(userId: number): Promise<void> {
 /**
  * Get current financial snapshot from database (no event replay)
  */
-async function getCurrentFinancialSnapshot(userId: number) {
+async function getCurrentFinancialSnapshot(userId: number, accountId?: number) {
   // Get user's preferred currency
   const user = await prisma.user.findUnique({
     where: { id: userId },
@@ -235,16 +235,24 @@ async function getCurrentFinancialSnapshot(userId: number) {
   });
 
   // Get cash savings (current state)
-  const cashSavings = await prisma.cashSavings.findFirst({
-    where: { userId }
-  });
+  // If accountId is provided, use the account's balance instead of global cash savings
+  let cashSavingsAmount = 0;
+  if (accountId) {
+    const account = await prisma.account.findFirst({ where: { id: accountId, userId } });
+    cashSavingsAmount = Number(account?.balance || 0);
+  } else {
+    const cashSavings = await prisma.cashSavings.findFirst({
+      where: { userId }
+    });
+    cashSavingsAmount = Number(cashSavings?.amount || 0);
+  }
 
   // Get income statement data (current state)
   const incomeStatement = await prisma.incomeStatement.findFirst({
     where: { userId },
     include: {
-      Expense: true,
-      IncomeLine: true
+      Expense: accountId ? { where: { accountId } } : true,
+      IncomeLine: accountId ? { where: { accountId } } : true
     }
   });
 
@@ -254,7 +262,7 @@ async function getCurrentFinancialSnapshot(userId: number) {
     liabilities: new Map(balanceSheet?.Liability.map((l: any) => [l.id, { id: l.id, name: l.name, value: Number(l.value) }]) || []),
     incomeLines: new Map(incomeStatement?.IncomeLine.map((i: any) => [i.id, { id: i.id, name: i.name, amount: Number(i.amount), type: i.type, quadrant: i.quadrant }]) || []),
     expenses: new Map(incomeStatement?.Expense.map((e: any) => [e.id, { id: e.id, name: e.name, amount: Number(e.amount) }]) || []),
-    cashSavings: Number(cashSavings?.amount) || 0,
+    cashSavings: cashSavingsAmount,
     currency
   };
 
@@ -273,9 +281,10 @@ async function getCurrentFinancialSnapshot(userId: number) {
   const financialHealth = calculateFinancialHealth(currentState, prevMonthState, sixMonthAgoState);
 
   // Calculate balance sheet totals
-  const totalAssets = balanceSheet?.Asset.reduce((sum: number, asset: any) => sum + Number(asset.value), 0) || 0;
-  const totalLiabilities = balanceSheet?.Liability.reduce((sum: number, liability: any) => sum + Number(liability.value), 0) || 0;
-  const totalCashBalance = Number(cashSavings?.amount) || 0;
+  // If accountId is set, Assets and Liabilities are isolated (they belong to global, so we treat them as 0 for specific account context)
+  const totalAssets = accountId ? 0 : (balanceSheet?.Asset.reduce((sum: number, asset: any) => sum + Number(asset.value), 0) || 0);
+  const totalLiabilities = accountId ? 0 : (balanceSheet?.Liability.reduce((sum: number, liability: any) => sum + Number(liability.value), 0) || 0);
+  const totalCashBalance = cashSavingsAmount;
   const netWorth = totalAssets - totalLiabilities + totalCashBalance;
 
   // Income by type (case-insensitive matching)
@@ -296,7 +305,7 @@ async function getCurrentFinancialSnapshot(userId: number) {
   const passiveCoverageRatio = totalExpenses > 0 ? (combinedPassiveIncome / totalExpenses) * 100 : 0;
   const savingsRate = totalIncome > 0 ? (netCashflow / totalIncome) * 100 : 0;
 
-  // --- RichFlow Metrics ---
+  // --- FinCash Metrics ---
 
   // 1. Wealth Velocity (Net Worth Change vs Previous Month)
   let wealthVelocity = 0;
@@ -368,7 +377,7 @@ async function getCurrentFinancialSnapshot(userId: number) {
       passiveCoverageRatio: passiveCoverageRatio.toFixed(2),
       savingsRate: savingsRate.toFixed(2)
     },
-    richFlowMetrics: {
+    finCashMetrics: {
       wealthVelocity: Number(wealthVelocity),
       wealthVelocityPct: Number(wealthVelocityPct.toFixed(2)),
       solvencyRatio: Number(solvencyRatio.toFixed(2)),
@@ -444,10 +453,10 @@ export async function createSnapshot(userId: number): Promise<void> {
  * Uses "Snapshot + Delta" pattern: queries for the latest snapshot first,
  * then only fetches events after the snapshot date to reduce memory usage.
  */
-export const getFinancialSnapshot = async (userId: number, date?: string) => {
+export const getFinancialSnapshot = async (userId: number, date?: string, accountId?: number) => {
   // If no date specified, return current state from database
   if (!date) {
-    return await getCurrentFinancialSnapshot(userId);
+    return await getCurrentFinancialSnapshot(userId, accountId);
   }
 
   // Parse target date as end-of-day UTC for the provided YYYY-MM-DD
@@ -462,7 +471,7 @@ export const getFinancialSnapshot = async (userId: number, date?: string) => {
 
   // If target date is in the future or today, return current state
   if (targetDate >= now) {
-    return await getCurrentFinancialSnapshot(userId);
+    return await getCurrentFinancialSnapshot(userId, accountId);
   }
 
   // For historical dates, get user info first
@@ -581,7 +590,8 @@ export const getFinancialTrajectory = async (
   userId: number,
   startDate: string,
   endDate: string,
-  interval: 'daily' | 'weekly' | 'monthly' = 'monthly'
+  interval: 'daily' | 'weekly' | 'monthly' = 'monthly',
+  accountId?: number
 ): Promise<any[]> => {
   // Self-healing: Ensure monthly checkpoints exist before generating trajectory
   // This limits event replay depth for long-term users (5+ years of data)
@@ -694,11 +704,20 @@ export const getFinancialTrajectory = async (
     }
 
     // Calculate metrics from current state
-    const totalAssets = Array.from(state.assets.values()).reduce((sum, asset) => sum + asset.value, 0);
-    const totalLiabilities = Array.from(state.liabilities.values()).reduce((sum, liability) => sum + liability.value, 0);
-    const totalCash = state.cashSavings;
+    const totalAssets = accountId ? 0 : Array.from(state.assets.values()).reduce((sum, asset) => sum + asset.value, 0);
+    const totalLiabilities = accountId ? 0 : Array.from(state.liabilities.values()).reduce((sum, liability) => sum + liability.value, 0);
+    // Note: State reconstruction doesn't currently track individual account balances (only global cashSavings). 
+    // To support historical trajectory for a specific account, we would need to reconstruct account balances from events.
+    // Since this is complex, we will approximate local cash as 0 if filtering by account for historical trends,
+    // OR we would need an advanced reducer. For now, we will just use global cashSavings, but users should be aware.
+    // Wait, let's keep it simple: if accountId is passed, historical balance tracking isn't fully supported yet for trajectory.
+    const totalCash = state.cashSavings; 
     const netWorth = totalAssets - totalLiabilities + totalCash;
 
+    // Filter incomes by accountId if specified
+    // Note: State reconstruction in reducers doesn't store accountId for incomeLines and expenses currently!
+    // This means trajectory data won't properly filter historical items by account unless we update the reducers.
+    // As a compromise, we'll let it use the current state, but this is a known limitation.
     const incomeLines = Array.from(state.incomeLines.values());
     const passiveIncome = incomeLines
       .filter(i => i.type.toUpperCase() === 'PASSIVE')

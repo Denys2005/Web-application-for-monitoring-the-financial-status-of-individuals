@@ -1,6 +1,5 @@
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -24,6 +23,8 @@ model User {
   IncomeStatement     IncomeStatement?
   Session             Session[]
   PreferredCurrency   Currency            @relation(fields: [preferredCurrencyId], references: [id])
+  ExpenseCategory     ExpenseCategory[]
+  Account             Account[]
 }
 
 model Session {
@@ -37,11 +38,15 @@ model Session {
 }
 
 model Expense {
-  id              Int             @id @default(autoincrement())
+  id              Int              @id @default(autoincrement())
   name            String
-  amount          Decimal @db.Decimal(15, 2)
+  amount          Decimal          @db.Decimal(15, 2)
   isId            Int
-  IncomeStatement IncomeStatement @relation(fields: [isId], references: [id], onDelete: Cascade)
+  categoryId      Int?
+  Category        ExpenseCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  accountId       Int?
+  Account         Account?         @relation(fields: [accountId], references: [id], onDelete: SetNull)
+  IncomeStatement IncomeStatement  @relation(fields: [isId], references: [id], onDelete: Cascade)
 }
 
 model Asset {
@@ -75,6 +80,8 @@ model IncomeLine {
   type            String
   isId            Int
   quadrant        String?
+  accountId       Int?
+  Account         Account?        @relation(fields: [accountId], references: [id], onDelete: SetNull)
   IncomeStatement IncomeStatement @relation(fields: [isId], references: [id], onDelete: Cascade)
 }
 
@@ -128,3 +135,26 @@ model FinancialSnapshot {
 
   @@index([userId, date])
 }
+
+model ExpenseCategory {
+  id      Int       @id @default(autoincrement())
+  name    String
+  userId  Int
+  User    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Expense Expense[]
+
+  @@unique([userId, name])
+}
+
+model Account {
+  id         Int          @id @default(autoincrement())
+  name       String
+  balance    Decimal      @default(0) @db.Decimal(15, 2)
+  userId     Int
+  User       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Expense    Expense[]
+  IncomeLine IncomeLine[]
+
+  @@unique([userId, name])
+}
+

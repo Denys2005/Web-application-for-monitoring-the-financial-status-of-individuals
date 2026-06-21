@@ -8,6 +8,7 @@ interface IncomeLineData {
   amount: number;
   type: string;
   quadrant?: IncomeQuadrant | string | null;
+  accountId?: number | null;
 }
 
 /**
@@ -18,7 +19,9 @@ export async function getIncomeLines(userId: number) {
   const incomeStatement = await prisma.incomeStatement.findFirst({
     where: { userId },
     include: {
-      IncomeLine: true
+      IncomeLine: {
+        include: { Account: true }
+      }
     }
   });
 
@@ -32,7 +35,9 @@ export async function getIncomeLines(userId: number) {
         }
       },
       include: {
-        IncomeLine: true
+        IncomeLine: {
+          include: { Account: true }
+        }
       }
     });
     return newStatement.IncomeLine;
@@ -65,9 +70,18 @@ export async function addIncomeLine(userId: number, data: IncomeLineData) {
       amount: data.amount,
       type: data.type,
       quadrant: resolvedQuadrant,
-      isId: incomeStatement.id // Link to income statement
-    }
+      isId: incomeStatement.id, // Link to income statement
+      ...(data.accountId != null ? { accountId: data.accountId } : {})
+    },
+    include: { Account: true }
   });
+
+  if (data.accountId) {
+    await prisma.account.update({
+      where: { id: data.accountId },
+      data: { balance: { increment: parseFloat(data.amount.toString()) } }
+    });
+  }
 
   // Log the CREATE event
   await logIncomeEvent(
@@ -79,7 +93,8 @@ export async function addIncomeLine(userId: number, data: IncomeLineData) {
       name: newIncomeLine.name,
       amount: newIncomeLine.amount,
       type: newIncomeLine.type,
-      quadrant: newIncomeLine.quadrant
+      quadrant: newIncomeLine.quadrant,
+      account: newIncomeLine.Account?.name
     }
   );
 
@@ -98,7 +113,8 @@ export async function updateIncomeLine(userId: number, incomeLineId: number, dat
       IncomeStatement: {
         userId
       }
-    }
+    },
+    include: { Account: true }
   });
 
   if (!incomeLine) {
@@ -110,8 +126,37 @@ export async function updateIncomeLine(userId: number, incomeLineId: number, dat
     name: incomeLine.name,
     amount: incomeLine.amount,
     type: incomeLine.type,
-    quadrant: incomeLine.quadrant
+    quadrant: incomeLine.quadrant,
+    account: incomeLine.Account?.name
   };
+
+  const oldAmount = parseFloat(incomeLine.amount.toString());
+  const newAmount = parseFloat(data.amount.toString());
+  const oldAccountId = incomeLine.accountId;
+  const newAccountId = data.accountId !== undefined ? data.accountId : incomeLine.accountId;
+
+  if (oldAccountId === newAccountId) {
+    if (oldAccountId && oldAmount !== newAmount) {
+      const diff = newAmount - oldAmount;
+      await prisma.account.update({
+        where: { id: oldAccountId },
+        data: { balance: { increment: diff } }
+      });
+    }
+  } else {
+    if (oldAccountId) {
+      await prisma.account.update({
+        where: { id: oldAccountId },
+        data: { balance: { decrement: oldAmount } }
+      });
+    }
+    if (newAccountId) {
+      await prisma.account.update({
+        where: { id: newAccountId },
+        data: { balance: { increment: newAmount } }
+      });
+    }
+  }
 
   // Update the income line
   const resolvedQuadrant = determineIncomeQuadrant(data.type, data.quadrant as string | undefined);
@@ -122,8 +167,10 @@ export async function updateIncomeLine(userId: number, incomeLineId: number, dat
       name: data.name,
       amount: data.amount,
       type: data.type,
-      quadrant: resolvedQuadrant
-    }
+      quadrant: resolvedQuadrant,
+      accountId: data.accountId !== undefined ? data.accountId : incomeLine.accountId
+    },
+    include: { Account: true }
   });
 
   // Log the UPDATE event
@@ -136,7 +183,8 @@ export async function updateIncomeLine(userId: number, incomeLineId: number, dat
       name: updatedIncomeLine.name,
       amount: updatedIncomeLine.amount,
       type: updatedIncomeLine.type,
-      quadrant: updatedIncomeLine.quadrant
+      quadrant: updatedIncomeLine.quadrant,
+      account: updatedIncomeLine.Account?.name
     }
   );
 
@@ -155,7 +203,8 @@ export async function deleteIncomeLine(userId: number, incomeLineId: number) {
       IncomeStatement: {
         userId
       }
-    }
+    },
+    include: { Account: true }
   });
 
   if (!incomeLine) {
@@ -167,8 +216,16 @@ export async function deleteIncomeLine(userId: number, incomeLineId: number) {
     name: incomeLine.name,
     amount: incomeLine.amount,
     type: incomeLine.type,
-    quadrant: incomeLine.quadrant
+    quadrant: incomeLine.quadrant,
+    account: incomeLine.Account?.name
   };
+
+  if (incomeLine.accountId) {
+    await prisma.account.update({
+      where: { id: incomeLine.accountId },
+      data: { balance: { decrement: parseFloat(incomeLine.amount.toString()) } }
+    });
+  }
 
   // Delete the income line
   await prisma.incomeLine.delete({

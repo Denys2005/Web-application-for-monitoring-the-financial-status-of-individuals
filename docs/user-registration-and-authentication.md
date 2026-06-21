@@ -1,6 +1,6 @@
-# RichFlow Authentication System Documentation
+# FinCash Authentication System Documentation
 
-**Project:** RichFlow - Personal Finance Management Application  
+**Project:** FinCash - Personal Finance Management Application  
 **Last Updated:** October 31, 2025  
 **Status:** Authentication Core Implementation Complete
 
@@ -24,7 +24,7 @@
 
 ## Overview
 
-The RichFlow authentication system provides secure user registration, login, and session management functionality. It implements a token-based authentication mechanism using JWT (JSON Web Tokens) with session tracking stored in a PostgreSQL database.
+The FinCash authentication system provides secure user registration, login, and session management functionality. It implements a token-based authentication mechanism using JWT (JSON Web Tokens) with session tracking stored in a PostgreSQL database.
 
 The system is designed with security best practices in mind, including password hashing, input validation, rate limiting, and protected route management.
 
@@ -1256,7 +1256,7 @@ PORT=5000
 NODE_ENV=development
 
 # Database
-DATABASE_URL="postgresql://username:password@localhost:5432/richflow"
+DATABASE_URL="postgresql://username:password@localhost:5432/fincash"
 
 # JWT
 JWT_SECRET="your-super-secret-jwt-key-change-in-production"
@@ -1553,7 +1553,7 @@ Frontend will run on `http://localhost:3000`
 
 3. **Be cautious with email:**
    - Verify sender before clicking links
-   - RichFlow will never ask for password via email
+   - FinCash will never ask for password via email
    - Be wary of phishing attempts
 
 ---

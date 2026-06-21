@@ -16,6 +16,10 @@ export interface ExpenseItem {
   id: number;
   name: string;
   amount: number;
+  categoryId?: number | null;
+  categoryName?: string | null;
+  accountId?: number | null;
+  accountName?: string | null;
 }
 
 export interface ExpenseTotals {
@@ -26,10 +30,16 @@ export interface ExpenseTotals {
 export interface AddExpenseInput {
   name: string;
   amount: number;
+  categoryId?: number | null;
+  accountId?: number | null;
 }
 
-export interface UpdateExpenseInput extends AddExpenseInput {
+export interface UpdateExpenseInput {
   id: number;
+  name: string;
+  amount: number;
+  categoryId?: number | null;
+  accountId?: number | null;
 }
 
 export interface DeleteExpenseInput {
@@ -60,6 +70,10 @@ const normalizeExpenseItem = (item: Record<string, unknown>): ExpenseItem => {
     id: item.id as number,
     name: item.name as string,
     amount: typeof item.amount === 'number' ? item.amount : parseFloat(item.amount as string),
+    categoryId: item.categoryId as number | null,
+    categoryName: (item.Category as any)?.name as string | null,
+    accountId: item.accountId as number | null,
+    accountName: (item.Account as any)?.name as string | null,
   };
 };
 
@@ -143,7 +157,7 @@ export const useAddExpenseMutation = () => {
 
   return useMutation({
     mutationFn: async (input: AddExpenseInput) => {
-      const response = await expensesAPI.addExpense(input.name, input.amount);
+      const response = await expensesAPI.addExpense(input.name, input.amount, input.categoryId, input.accountId);
       // API may return { expense: {...} } or the item directly
       const expenseData = response.expense || response;
       return normalizeExpenseItem(expenseData);
@@ -165,6 +179,10 @@ export const useAddExpenseMutation = () => {
           id: -Date.now(), // Temporary ID (will be replaced on success)
           name: newExpense.name,
           amount: newExpense.amount,
+          categoryId: newExpense.categoryId ?? null,
+          categoryName: null, // Will be filled on refetch
+          accountId: newExpense.accountId ?? null,
+          accountName: null,
         };
         
         return [...oldArray, optimisticItem];
@@ -207,7 +225,7 @@ export const useUpdateExpenseMutation = () => {
 
   return useMutation({
     mutationFn: async (input: UpdateExpenseInput) => {
-      const response = await expensesAPI.updateExpense(input.id, input.name, input.amount);
+      const response = await expensesAPI.updateExpense(input.id, input.name, input.amount, input.categoryId, input.accountId);
       const expenseData = response.expense || response;
       return normalizeExpenseItem(expenseData);
     },
@@ -226,6 +244,10 @@ export const useUpdateExpenseMutation = () => {
               ...item,
               name: updatedExpense.name,
               amount: updatedExpense.amount,
+              categoryId: updatedExpense.categoryId ?? item.categoryId,
+              categoryName: item.categoryName, // will be refreshed on settle
+              accountId: updatedExpense.accountId ?? item.accountId,
+              accountName: item.accountName,
             };
           }
           return item;

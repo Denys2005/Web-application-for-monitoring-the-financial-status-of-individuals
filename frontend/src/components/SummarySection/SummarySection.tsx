@@ -104,7 +104,7 @@ const SummarySection: React.FC<Props> = ({
       <div 
         className="py-4 px-8 text-center font-bold text-white shrink-0"
         style={{
-          background: 'linear-gradient(135deg, var(--color-purple) 0%, var(--color-purple-light) 100%)',
+          background: 'linear-gradient(135deg, var(--color-green) 0%, var(--color-green-light) 100%)',
           borderRadius: '8px 8px 0 0',
           fontSize: 'clamp(1.25rem, 3vw + 0.5rem, 1.8rem)'
         }}
@@ -256,7 +256,7 @@ const SummarySection: React.FC<Props> = ({
               style={{
                 border: '1px solid rgba(255,255,255,0.03)',
                 padding: '12px 14px',
-                background: 'linear-gradient(90deg, rgba(115,69,175,0.06), rgba(157,109,212,0.03))'
+                background: 'linear-gradient(90deg, rgba(16,185,129,0.06), rgba(52,211,153,0.03))'
               }}
             >
               <div className="rf-total-label">
@@ -288,7 +288,7 @@ const SummarySection: React.FC<Props> = ({
               </span>
               {!cashSavingsLoading && (
                 <button 
-                  className="bg-white/5 border border-white/10 text-[#c69df7] py-1.5 px-2 rounded cursor-pointer text-[0.9rem] transition-all duration-200 hover:bg-white/10 hover:scale-105" 
+                  className="bg-white/5 border border-white/10 text-(--color-green) py-1.5 px-2 rounded cursor-pointer text-[0.9rem] transition-all duration-200 hover:bg-white/10 hover:scale-105" 
                   onClick={handleEditClick}
                   aria-label="Edit cash savings"
                 >
@@ -300,7 +300,7 @@ const SummarySection: React.FC<Props> = ({
             <div className="flex items-center gap-1.5">
               <input
                 type="number"
-                className="bg-white/8 border border-white/15 text-white py-1.5 px-2.5 rounded text-[0.95rem] font-bold w-[120px] outline-none transition-all duration-200 focus:bg-white/12 focus:border-(--color-purple) focus:shadow-[0_0_0_2px_rgba(115,69,175,0.2)] disabled:opacity-60 disabled:cursor-not-allowed"
+                className="bg-white/8 border border-white/15 text-white py-1.5 px-2.5 rounded text-[0.95rem] font-bold w-[120px] outline-none transition-all duration-200 focus:bg-white/12 focus:border-(--color-green) focus:shadow-[0_0_0_2px_rgba(16,185,129,0.2)] disabled:opacity-60 disabled:cursor-not-allowed"
                 value={editValue}
                 onChange={handleInputChange}
                 onKeyDown={handleKeyDown}
@@ -313,9 +313,9 @@ const SummarySection: React.FC<Props> = ({
               <button 
                 className="py-1.5 px-3 rounded cursor-pointer text-base font-bold transition-all duration-200 border text-white disabled:opacity-60 disabled:cursor-not-allowed hover:scale-105"
                 style={{
-                  background: 'linear-gradient(135deg, var(--color-purple) 0%, var(--color-purple-light) 100%)',
-                  borderColor: 'rgba(115,69,175,0.6)',
-                  boxShadow: '0 2px 8px rgba(115,69,175,0.2)'
+                  background: 'linear-gradient(135deg, var(--color-green) 0%, var(--color-green-light) 100%)',
+                  borderColor: 'rgba(16,185,129,0.6)',
+                  boxShadow: '0 2px 8px rgba(16,185,129,0.2)'
                 }}
                 onClick={handleSaveClick}
                 disabled={saving}

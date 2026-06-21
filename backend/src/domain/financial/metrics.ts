@@ -175,7 +175,7 @@ export function calculateFinancialHealth(
  * - Balance sheet totals
  * - Cashflow breakdown by income type
  * - Financial ratios
- * - RichFlow metrics (Wealth Velocity, Solvency, Freedom Gap)
+ * - FinCash metrics (Wealth Velocity, Solvency, Freedom Gap)
  * - Income quadrant distribution
  */
 export function calculateSnapshotFromState(
@@ -216,7 +216,7 @@ export function calculateSnapshotFromState(
     const passiveCoverageRatio = totalExpenses > 0 ? (combinedPassiveIncome / totalExpenses) * 100 : 0;
     const savingsRate = totalIncome > 0 ? (netCashflow / totalIncome) * 100 : 0;
 
-    // --- RichFlow Metrics ---
+    // --- FinCash Metrics ---
 
     // 1. Wealth Velocity (Net Worth Change vs Previous Month)
     let wealthVelocity = 0;
@@ -291,7 +291,7 @@ export function calculateSnapshotFromState(
             passiveCoverageRatio: passiveCoverageRatio.toFixed(2),
             savingsRate: savingsRate.toFixed(2)
         },
-        richFlowMetrics: {
+        finCashMetrics: {
             wealthVelocity: Number(wealthVelocity),
             wealthVelocityPct: Number(wealthVelocityPct.toFixed(2)),
             solvencyRatio: Number(solvencyRatio.toFixed(2)),

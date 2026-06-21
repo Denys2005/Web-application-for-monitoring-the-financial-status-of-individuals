@@ -39,7 +39,7 @@ const AdminHeader: React.FC = () => {
 
         {/* Right side - Logo */}
         <div className="flex items-center gap-2">
-          <img src="/assets/richflow.png" alt="RichFlow" className="w-10 h-10 object-contain" />
+          <img src="/assets/fincash.png" alt="FinCash" className="w-10 h-10 object-contain" />
         </div>
       </header>
 
@@ -54,11 +54,11 @@ const AdminHeader: React.FC = () => {
         {/* User Info Section */}
         <div className="rf-sidebar-user">
           <div className="rf-sidebar-avatar">
-            <img src="/assets/richflow.png" alt="Admin" />
+            <img src="/assets/fincash.png" alt="Admin" />
           </div>
           <div className="rf-sidebar-user-details">
             <span className="rf-sidebar-user-name">{user?.name || 'Administrator'}</span>
-            <span className="rf-sidebar-user-email">{user?.email || 'admin@richflow.app'}</span>
+            <span className="rf-sidebar-user-email">{user?.email || 'admin@fincash.app'}</span>
           </div>
         </div>
 

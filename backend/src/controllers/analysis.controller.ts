@@ -10,8 +10,9 @@ export async function getFinancialSnapshotHandler(req: Request, res: Response, n
     }
 
     const date = req.query.date as string | undefined;
+    const accountId = req.query.accountId ? parseInt(req.query.accountId as string, 10) : undefined;
 
-    const snapshot = await getFinancialSnapshot(userId, date);
+    const snapshot = await getFinancialSnapshot(userId, date, accountId);
 
     return res.status(200).json(snapshot);
   } catch (error: any) {
@@ -31,12 +32,13 @@ export async function getFinancialTrajectoryHandler(req: Request, res: Response,
     const startDate = req.query.startDate as string;
     const endDate = req.query.endDate as string;
     const interval = (req.query.interval as 'daily' | 'weekly' | 'monthly') || 'monthly';
+    const accountId = req.query.accountId ? parseInt(req.query.accountId as string, 10) : undefined;
 
     if (!startDate || !endDate) {
       return res.status(400).json({ error: 'startDate and endDate are required' });
     }
 
-    const trajectory = await getFinancialTrajectory(userId, startDate, endDate, interval);
+    const trajectory = await getFinancialTrajectory(userId, startDate, endDate, interval, accountId);
 
     return res.status(200).json(trajectory);
   } catch (error: any) {
