@@ -89,8 +89,8 @@ export async function login(req: Request, res: Response, next: NextFunction) {
     // Set refresh token as httpOnly cookie
     res.cookie('refreshToken', session.token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      secure: process.env.NODE_ENV === 'production' && process.env.DISABLE_SECURE_COOKIES !== 'true',
+      sameSite: process.env.NODE_ENV === 'production' && process.env.DISABLE_SECURE_COOKIES !== 'true' ? 'none' : 'lax',
       maxAge: 30 * 24 * 60 * 60 * 1000
     });
 
